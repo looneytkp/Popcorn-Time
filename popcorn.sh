@@ -34,7 +34,7 @@ i=0
 while kill -0 $pid 2>/dev/null
 do
   i=$(( (i+1) %4 ))
-  printf "#"
+  printf ""
   sleep .2
 done
 echo "]
@@ -42,52 +42,7 @@ Done!"${NC}
 #delete Popcorn-Time-0.3.10-Linux-32.tar.xz in /popcorntime
 rm Popcorn-Time-0.3.10-Linux-64.tar.xz
 sleep 0.4
-createprompt
-}
-
-desktopentry() {
-# Adds a desktop entry for the current user
-	NAME="Popcorn Time"
-	COMMENT="Watch Movies and TV Shows instantly!"
-
-	CURRENT_DIR=$(pwd)
-	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
-	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
-
-	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
-	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
-
-	echo "[Desktop Entry]" > $DESKTOP_FILE
-	echo "Version=1.0" >> $DESKTOP_FILE
-	echo "Type=Application" >> $DESKTOP_FILE
-	echo "Name=$NAME" >> $DESKTOP_FILE
-	echo "Icon=$ICON_PATH" >> $DESKTOP_FILE
-	echo "Exec=\"$EXECUTABLE\" %U" >> $DESKTOP_FILE
-	echo "Comment=$COMMENT" >> $DESKTOP_FILE
-	echo "Categories=Multimedia;" >> $DESKTOP_FILE
-	echo "Terminal=false" >> $DESKTOP_FILE
-
-	# Updates the desktop entries
-	gtk-update-icon-cache /usr/share/icons/hicolor
-
-	echo "Desktop entry added for $(whoami)"
-  launch
-}
-
-createprompt() {
-echo "Create a desktop entry for Popcorn Time for the current user ? (Y)es/(N)o: "
-read -n1 input
-if [ "$input" == "Y" ] || [ "$input" == "y" ] || [ "$input" == "" ]
-then
-	case "$(uname)" in
-		Linux)
-			desktopentry ;;
-		Darwin)
-			echo "Create a desktop entry is only meant to be used on Linux" ;;
-	esac
-else
-	echo -e "Cancel. /nJust execute ./Create-Desktop-Entry when you are ready to create a desktop entry for Popcorn Time"
-fi
+entry
 }
 
 entry() {
@@ -95,7 +50,10 @@ entry() {
 echo
 echo "${LIGHT_PURPLE}Creating Desktop Entry${YELLOW}"
 echo
-wget https://raw.githubusercontent.com/popcorn-official/popcorn-desktop/development/Create-Desktop-Entry
+#wget https://raw.githubusercontent.com/popcorn-official/popcorn-desktop/development/Create-Desktop-Entry
+cd -
+cp Create-Desktop-Entry /home/$USER/popcorntime/
+cd /home/$USER/popcorntime
 #setting permissions
 echo
 echo "${LIGHT_PURPLE}Setting permissions${YELLOW}"
@@ -111,13 +69,16 @@ notice
 
 entry2() {
 #creating desktop entry
-echo "${LIGHT_PURPLE}Creating Desktop Entry${YELLOW}"
-wget https://raw.githubusercontent.com/popcorn-official/popcorn-desktop/development/Create-Desktop-Entry
+#echo "${LIGHT_PURPLE}Creating Desktop Entry${YELLOW}"
+#wget https://raw.githubusercontent.com/popcorn-official/popcorn-desktop/development/Create-Desktop-Entry
 #setting permissions
-echo "${LIGHT_PURPLE}Applying possible fix${YELLOW}"
+echo "${LIGHT_PURPLE}Applying possible fix for permissions${YELLOW}"
+cd -
+cp Create-Desktop-Entry /home/$USER/popcorntime/
+cd /home/$USER/popcorntime
 chmod +x Create-Desktop-Entry
 chmod 755 Create-Desktop-Entry
-s#leep 1
+sleep 1
 ls -l Create-Desktop-Entry
 echo "${LIGHT_PURPLE}Possible fix applied${YELLOW}"
 #executing create-desktop-entry script
@@ -136,14 +97,15 @@ done
 
 notice() {
 echo
-echo "${LIGHT_CYAN}Due to issues with setting permissions for desktop entry, scroll up a bit & check from "Settings permissions" for any "Permission denied" output. If it exists, select fix permissions  below to apply a possible fix set permissions correctly, select continue if there is not "Permission denied" output.${NC}"
+echo "${LIGHT_CYAN}Certain issues occur when setting permissions for desktop entry, thus scroll up a bit & check from ${LIGHT_PURPLE}Settings permissions$ ${LIGHT_CYAN}for any${NC} "Permission denied" ${LIGHT_PURPLE}output. If this output exists, select 1) Fix permissions below to apply a possible fix to set permissions correctly. Select 2) Continue if there is no ${NC}"Permission denied" ${LIGHT_PURPLE}output.${NC}"
 checkperm
 }
 
 notice2() {
 echo
-echo "${LIGHT_CYAN}Possible fix is applied, yet scroll up a bit & check for from "Applying possible fix " for any "Permission denied" output. If it still exists please file a report. If not then the fix was successful.${NC}"
+echo "${LIGHT_CYAN}Possible fix for permissions is applied, however  scroll up a bit & check for from "Applying possible fix " for any "Permission denied" output. If it still exists please file a report. If not then the fix was successful.${NC}"
 sleep 3
+echo
 launch
 }
 
@@ -154,7 +116,7 @@ ${LIGHT_PURPLE}1) Fix permission
 2) Continue"
 read -p "-> " answer
 if [ "$answer" = "1" ]; then
-rm Create-Desktop-Entry
+#rm Create-Desktop-Entry
 entry2
 fi
 if [ "$answer" = "2" ]; then
