@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+(( EUID != 0 )) && exec sudo -- "$0" "$@"
+gtk-update-icon-cache /usr/share/icons/hicolor

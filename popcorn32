@@ -1,0 +1,122 @@
+#!/bin/bash
+#script 4.3 final by LooNeyTKp™
+
+#exits shell when there is an error
+set -e
+NC='\033[0m' # No Color
+YELLOW='\033[1;33m'
+LIGHT_CYAN='\033[1;36m'
+
+startscript() {
+sleep 0.5
+echo -e "
+"
+startinstall
+}
+
+startinstall() {
+echo -e "                    ${LIGHT_CYAN}Popcorn Time for 32bit${YELLOW}"
+echo
+cd ~
+if [ -d popcorntime ]; then
+rm -r popcorntime && mkdir popcorntime
+else
+mkdir popcorntime
+fi
+cd -
+cp Popcorn-Time-0.3.10-Linux-32.tar.xz /home/$USER/popcorntime/
+cd /home/$USER/popcorntime
+#unpacking popcorn time archive
+echo "Installing..."
+tar xf Popcorn-Time-0.3.10-Linux-32.tar.xz &
+pid=$! # Process Id of the running command
+printf "["
+i=0
+while kill -0 $pid 2>/dev/null
+do
+  i=$(( (i+1) %4 ))
+  printf "#"
+  sleep .4
+done
+/bin/echo -e "]
+Done!"${NC}
+#delete Popcorn-Time-0.3.10-Linux-32.tar.xz in /popcorntime
+rm Popcorn-Time-0.3.10-Linux-32.tar.xz
+create
+}
+
+create() {
+			createdesktopentry;
+			sleep 1
+}
+
+# Adds a desktop entry for the current user
+createdesktopentry() {
+	NAME="Popcorn Time"
+	COMMENT="Watch Movies and TV Shows instantly!"
+
+	CURRENT_DIR=$(pwd)
+	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
+	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
+
+	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
+
+	echo "[Desktop Entry]" > $DESKTOP_FILE
+	echo "Version=1.0" >> $DESKTOP_FILE
+	echo "Type=Application" >> $DESKTOP_FILE
+	echo "Name=$NAME" >> $DESKTOP_FILE
+	echo "Icon=$ICON_PATH" >> $DESKTOP_FILE
+	echo "Exec=\"$EXECUTABLE\" %U" >> $DESKTOP_FILE
+	echo "Comment=$COMMENT" >> $DESKTOP_FILE
+	echo "Categories=Multimedia;" >> $DESKTOP_FILE
+	echo "Terminal=false" >> $DESKTOP_FILE
+}
+
+launch() {
+/bin/echo -e "${LIGHT_CYAN}Launch Popcorn Time ?" && read -p "(Y)es/(N)o > " RESP;
+#input list for yes
+if [ "$RESP" = "y" ] || [ "$RESP" = "Y" ] || [ "$RESP" = "yes" ] || [ "$RESP" = "YES" ] || [ "$RESP" = "Yes" ];
+then
+    sleep 1
+    /bin/echo -e "Launching..."
+    ./Popcorn-Time
+    installcomplete
+fi
+#input list for no
+if [ "$RESP" = "n" ] || [ "$RESP" = "N" ] || [ "$RESP" = "no" ] || [ "$RESP" = "NO" ] || [ "$RESP" = "No" ];
+then
+installcomplete
+fi
+if [ "$RESP" != "y" ] || [ "$RESP" != "Y" ] ||  "$RESP" != "yes" ] ||  "$RESP" != "YES" ] ||  "$RESP" != "Yes" ] ||  "$RESP" != "n" ] ||  "$RESP" != "N" ] ||  "$RESP" != "no" ] ||  "$RESP" != "NO" ] ||[ "$RESP" != "" ];  then
+/bin/echo -e "Invalid input" && launchtrap
+fi
+}
+
+launchtrap() {
+while :
+do
+trap launch EXIT
+break
+done
+}
+
+installcomplete() {
+echo
+cd -
+/bin/echo -e "Grant root permission"
+./update-gtk-icon-cache
+echo
+sleep 0.5
+
+/bin/echo -e "
+                    Installation complete!"
+echo
+sleep 1
+exit 1
+}
+
+startscript
+launch
+
+#script complete
