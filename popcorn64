@@ -105,7 +105,7 @@ installcomplete() {
 echo
 cd -
 /bin/echo -e "Grant root permission"
-./update-gtk-icon-cache
+./gtk-icon-cache
 echo
 sleep 0.5
 
