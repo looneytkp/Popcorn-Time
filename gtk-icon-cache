@@ -1,4 +1,5 @@
 #!/bin/bash
+#updates gtk icon cache
 
 set -e
 (( EUID != 0 )) && exec sudo -- "$0" "$@"
