@@ -1,6 +1,16 @@
-# INSTRUCTIONS
-1. First download the package from their website --> https://popcorntime.sh
-The website automatically detects if your pc is 64 or 32 bit and downloads the package according to your pc's spec
-2. Place both the downloaded and the script in the same folder
-3. Open terminal in that folder and type without braces " ./popcorn32 " for 32bit and " ./popcorn64 " for 64bit. Or double clickon the script and select Run in terminal.
-4. Be patient
+# INSTRUCTIONS - FOR LINUX PC'S ONLY
+
+First download the commuinity version of popcorn-time for linux website --> https://popcorntime.sh
+The website automatically detects if your pc is 64 or 32 bit and downloads the package according to your pc's spec.
+
+If PC is 32bit
+Assuming you have the popcorntime.zip you downloaded from github, extract it.
+1. Cut or copy place the downloaded "popcorntime.32bit.tar.xz" package and paste it in the folder popcorntime folder (the folder created after extracting popcorntime.zip)
+3. Open terminal in the popcorntime folder and type without braces " ./popcorn32 ". Or double-click on the script and select Run in terminal.
+4. Done
+
+If PC is 64bit
+Assuming you have the popcorntime.zip you downloaded from github, extract it.
+1. Cut or copy place the downloaded "popcorntime.64bit.tar.xz" package and paste it in the folder popcorntime folder (the folder created after extracting popcorntime.zip)
+3. Open terminal in the popcorntime folder and type without braces " ./popcorn64 ". Or double-click on the script and select Run in terminal.
+4. Done
