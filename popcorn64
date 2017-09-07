@@ -22,11 +22,11 @@ else
 mkdir popcorntime
 fi
 cd -
-cp Popcorn-Time-0.3.10-Linux-64.tar.xz /home/$USER/popcorntime/
+cp Popcorn-Time-64.tar.xz /home/$USER/popcorntime/
 cd /home/$USER/popcorntime
 #unpacking popcorn time archive
 echo "Installing..."
-tar xf Popcorn-Time-0.3.10-Linux-64.tar.xz &
+tar xf Popcorn-Time-64.tar.xz &
 pid=$! # Process Id of the running command
 printf "["
 i=0
