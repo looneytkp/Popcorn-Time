@@ -1,5 +1,5 @@
 # Popcorn Time
-A script to install popcorn time on your 32/64 bit Linux (debian/ubuntu) based pc.
+#### A script to install popcorn time on your 32/64 bit Linux (debian/ubuntu) based pc.
 
 First download the community version of popcorn-time for linux here --> https://popcorntime.sh
 The website automatically detects if your pc is 64 or 32 bit and downloads the package according to your PC's specification.
