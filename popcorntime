@@ -12,7 +12,8 @@ case $1 in
           read -p "#? " dl
           case $dl in
               y) cd ~/Downloads
-                 if [ arch = "x86_64" ]; then
+                 bit=$(arch)
+                 if [ $bit = "x86_64" ]; then
                    wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
                    unzip popcorn.zip
                    #wget -O /popcorntime-master/Popcorn-Time-64.tar.xz #popcorntime 64bit link
@@ -21,7 +22,7 @@ case $1 in
                    else
                        wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
                        unzip popcorn.zip
-                       #wget -O /popcorntime-master/Popcorn-Time-32.tar.xz #popcorntime 64bit link
+                       #wget -O /popcorntime-master/Popcorn-Time-32.tar.xz #popcorntime 32bit link
                        cd popcorntime-master && bash popcorn32
                        cd - && rm -r popcorntime-master && rm popcorn.zip
                  fi;;
