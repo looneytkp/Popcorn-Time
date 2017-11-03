@@ -5,24 +5,48 @@ set -e
 LB='\033[1;34m'
 LG='\033[1;32m'
 case $1 in
-    "") cd /home/looney/popcorntime
-         ./Popcorn-Time
-         echo;;
+    "") if [ ! -d /home/looney/popcorntime ]; then
+          echo -e "${LG}Popcorn Time is not installed, wanna download and install ? y/n"
+          echo "p.s: must have internet connection."
+          shopt -u nocasematch
+          read -p "#? " dl
+          case $dl in
+              y) cd ~/Downloads
+                 if [ arch = "x86_64" ]; then
+                   wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
+                   #wget -O Popcorn-Time-64.tar.xz #popcorntime 64bit link
+                   unzip popcorn.zip
+                   cd popcorntime-master && bash popcorn64
+                   cd -
+                   rm -r popcorntime-master && rm popcorn.zip
+                   else
+                       wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
+                       #wget -O Popcorn-Time-32.tar.xz #popcorntime 32bit link
+                       unzip popcorn.zip
+                       cd popcorntime-master && bash popcorn32
+                       cd -
+                       rm -r popcorntime-master && rm popcorn.zip
+                 fi;;
+               *) exit 0;;
+          esac
+          else
+              cd /home/looney/popcorntime
+              ./Popcorn-Time | echo -e "${LG}Popcorn Time is running"
+              echo -e "${LG}Exited"
+        fi;;
     "-r"|"--remove") rm -r /home/$USER/popcorntime
                      sudo rm -f /usr/bin/popcorntime
-                     sleep 0.3 && echo
+                     sleep 0.3
                      echo -e "${LG}Popcorn Time is uninstalled"
-                     echo -e "Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime"
+                     echo -e "Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime";;
+    "-u"|"--update") echo -e "${LG}Still under development."
                      echo;;
-    "-u"|"--update") echo && echo -e "${LG}Still under development."
-                     echo;;
-    "--help") echo && echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..." && echo
+    "--help") echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..."
               echo -e "${LG}Typing ${LB}'popcorntime'    ${LG}launches the Popcorn Time application."
               echo -e "       ${LB}'-u / --update'  ${LG}checks for updates."
               echo -e "       ${LB}'-r / --remove'  ${LG}uninstalls Popcorn Time."
-              echo -e "       ${LB}'--help'         ${LG}open the help page" && echo
-              echo -e "example: ${LB}popcorntime -u ${LG}or ${LB}popcorntime --update ${LG}to update Popcorn Time"
-              echo;;
-    *) echo "$1 is not a valid argument."
+              echo -e "       ${LB}'--help'         ${LG}open the help page"
+              echo -e "example: ${LB}popcorntime -u ${LG}or ${LB}popcorntime --update ${LG}to update Popcorn Time";;
+    *) echo -e "${LB}'$1' ${LG}is not a valid argument."
        echo -e "try ${LB}--help ${LG}for more info";;
 esac

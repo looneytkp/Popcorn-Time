@@ -100,18 +100,45 @@ echo "                    Installation complete!"
 echo
 sleep 1
 }
-if [ ! -f Popcorn-Time-64* ]; then
-  sleep 0.7 && echo
-  echo -e "${LR}Popcome time installation file not found!. Read instructions below"
-  echo && echo -e "${LC}#### 64bit PC"
-  echo "1. Put the downloaded file in the same folder where the popcorn64.sh script is."
-  echo "   Or create a specific folder and place both files in it."
-  echo
-  echo -e "2. Double click and run the "${Y}popcorn64" ${LC}script."
-  echo -e "   Or open terminal in that particular folder and type "${Y}bash popcorn64"${LC}."
-  echo -e "3. Enjoy..."
-  echo && exit 2;
-  else
-      strtscrpt
-      lch
-fi
+case $1 in
+    "") if [ ! -f Popcorn-Time-64* ]; then
+          sleep 0.7 && echo
+          echo -e "${LR}Popcome time installation file not found!. Read instructions below"
+          echo && echo -e "${LC}#### 64bit PC"
+          echo "1. Put the downloaded file in the same folder where the popcorn64.sh script is."
+          echo "   Or create a specific folder and place both files in it."
+          echo
+          echo -e "2. Double click and run the "${Y}popcorn64" ${LC}script."
+          echo -e "   Or open terminal in that particular folder and type "${Y}bash popcorn64"${LC}."
+          echo -e "3. Enjoy..."
+          echo;
+          else
+              strtscrpt
+              lch
+        fi;;
+    "-p"|"--pop") if [ ! -f popcorntime ]; then
+                    echo -e "${LR}Cannot find popcorntime file"
+                    else
+                        if [ ! -f /usr/bin/popcorntime ]; then
+                          sudo cp popcorntime /usr/bin/popcorntime
+                          cd /usr/bin
+                          sudo chmod 755 popcorntime
+                          echo -e "${LC}Done!"
+                          echo -e "Type ${Y}popcorntime --help ${LC}in terminal for more info."
+                          else
+                              sudo rm /usr/bin/popcorntime
+                              sudo cp popcorntime /usr/bin/popcorntime
+                              cd /usr/bin
+                              sudo chmod 755 popcorntime
+                              echo -e "${LC}Done!"
+                              echo -e "Type ${Y}popcorntime --help ${LC}in terminal for more info."
+                        fi
+                  fi;;
+    "--help") echo -e "${LC}Usage: ${Y}popcorn64 [OPTION]..."
+              echo -e "${LC}Typing ${Y}'popcorn64'   ${LC}executes the installation of Popcorn Time"
+              echo -e "       ${Y}'-p / --pop'  ${LC}copies the popcorntime file to /usr/bin/ only"
+              echo -e "       ${Y}'--help'      ${LC}opens the info page"
+              echo -e "example: ${Y}popcorntime -p ${LC}or ${Y}popcorntime --pop";;
+    *) echo -e "${Y}'$1' ${LC}is not a valid argument."
+       echo -e "try ${Y}--help ${LC}for more info";;
+esac
