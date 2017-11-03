@@ -82,12 +82,12 @@ instcomp() {
 cd -
 sudo gtk-update-icon-cache /usr/share/icons/hicolor
 if [ ! -f /usr/bin/popcorntime ]; then
-  sudo mv popcorntime /usr/bin/popcorntime
+  sudo cp popcorntime /usr/bin/popcorntime
   cd /usr/bin
   sudo chmod 755 popcorntime
   else
       sudo rm /usr/bin/popcorntime
-      sudo mv popcorntime /usr/bin/popcorntime
+      sudo cp popcorntime /usr/bin/popcorntime
       cd /usr/bin
       sudo chmod 755 popcorntime
 fi
