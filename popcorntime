@@ -15,7 +15,7 @@ case $1 in
                      echo -e "Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime"
                      echo;;
     "-u"|"--update") ;;
-    "--help") echo && echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..."
+    "--help") echo && echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..." && echo
               echo -e "${LG}Typing ${LB}'popcorntime' ${LG}launches the Popcorn Time application, arguments are below"
               echo -e "${LB}-u; --update         ${LG}checks for updates."
               echo -e "${LB}-r; --remove         ${LG}uninstalls Popcorn Time."
