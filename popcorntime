@@ -14,18 +14,16 @@ case $1 in
               y) cd ~/Downloads
                  if [ arch = "x86_64" ]; then
                    wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
-                   #wget -O Popcorn-Time-64.tar.xz #popcorntime 64bit link
                    unzip popcorn.zip
+                   #wget -O /popcorntime-master/Popcorn-Time-64.tar.xz #popcorntime 64bit link
                    cd popcorntime-master && bash popcorn64
-                   cd -
-                   rm -r popcorntime-master && rm popcorn.zip
+                   cd - && rm -r popcorntime-master && rm popcorn.zip
                    else
                        wget -O popcorn.zip https://github.com/looneytkp/popcorntime/archive/master.zip
-                       #wget -O Popcorn-Time-32.tar.xz #popcorntime 32bit link
                        unzip popcorn.zip
+                       #wget -O /popcorntime-master/Popcorn-Time-32.tar.xz #popcorntime 64bit link
                        cd popcorntime-master && bash popcorn32
-                       cd -
-                       rm -r popcorntime-master && rm popcorn.zip
+                       cd - && rm -r popcorntime-master && rm popcorn.zip
                  fi;;
                *) exit 0;;
           esac
