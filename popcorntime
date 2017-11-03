@@ -15,11 +15,11 @@ case $1 in
                      echo -e "Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime"
                      echo;;
     "-u"|"--update") ;;
-    "--help") echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..."
+    "--help") echo && echo -e "${LG}Usage: ${LB}popcorntime [OPTION]..."
               echo -e "${LG}Typing ${LB}'popcorntime' ${LG}launches the Popcorn Time application, arguments are below"
               echo -e "${LB}-u; --update         ${LG}checks for updates."
               echo -e "${LB}-r; --remove         ${LG}uninstalls Popcorn Time."
-              echo -e "${LB}--help               ${LG}open the help page"
+              echo -e "${LB}--help               ${LG}open the help page" && echo
               echo -e "example: ${LB}popcorntime -u ${LG}or ${LB}popcorntime --update ${LG}to update Popcorn Time"
               echo;;
     *) echo "$1 is not a valid argument."
