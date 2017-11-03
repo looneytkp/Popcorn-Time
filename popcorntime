@@ -22,6 +22,6 @@ case $1 in
               echo "${LB}--help               ${LG}open the help page"
               echo "example: ${LB}popcorntime -u ${LG}or ${LB}popcorntime --update ${LG}to update Popcorn Time"
               echo;;
-    *) echo -e ;;
+    *) echo "$1 is not a valid argument."
+       echo "try ${LB}--help ${LG}for more info";;
 esac
-
