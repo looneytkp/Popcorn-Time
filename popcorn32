@@ -6,7 +6,6 @@ NC='\033[0m'
 Y='\033[1;33m'
 LC='\033[1;36m'
 LR='\033[1;31m'
-bashh='#!/bin/bash'
 strtscrpt() {
 sleep 0.5
 echo -e "
@@ -82,36 +81,19 @@ esac
 instcomp() {
 cd -
 sudo gtk-update-icon-cache /usr/share/icons/hicolor
-#echo "$bashh
-
-#LB='\033[1;34m'
-#LG='\033[1;32m'
-#cd /home/looney/popcorntime
-#./Popcorn-Time
-#echo
-#echo "${LG}Type ${LB}popcorntime -r ${LG}to uninstall Popcorn Time."
-#case $rmv in
-#    r)
-#      rm -r /home/$USER/popcorntime
-#sudo rm -f /usr/bin/popcorntime
-#sleep 0.3
-#echo \"${LG}Popcorn Time is uninstalled\"
-#echo \"Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime.git\"
-#exit 2;;
-#esac" > popcorntime
-#if [ ! -f /usr/bin/popcorntime ]; then
-#  sudo mv popcorntime /usr/bin/popcorntime
-#  cd /usr/bin
-#  sudo chmod 755 popcorntime
-#  else
-#      sudo rm /usr/bin/popcorntime
-#      sudo mv popcorntime /usr/bin/popcorntime
-#      cd /usr/bin
-#      sudo chmod 755 popcorntime
-#fi
+if [ ! -f /usr/bin/popcorntime ]; then
+  sudo mv popcorntime /usr/bin/popcorntime
+  cd /usr/bin
+  sudo chmod 755 popcorntime
+  else
+      sudo rm /usr/bin/popcorntime
+      sudo mv popcorntime /usr/bin/popcorntime
+      cd /usr/bin
+      sudo chmod 755 popcorntime
+fi
 echo && sleep 0.5
 echo -e "${LC}GTK icon cache updated, you should find Popcorn Time in your applist."
-echo -e "Also typing ${Y}popcorntime ${LC}in terminal will launch Popcorn Time."
+echo -e "Type ${Y}popcorntime --help ${LC}in terminal for more info."
 echo "Enjoy :)"
 sleep 0.5 && echo
 echo "                    Installation complete!"
