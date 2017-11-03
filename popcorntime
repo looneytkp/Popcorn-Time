@@ -1,0 +1,27 @@
+#!/bin/bash
+# v5.0 final by looneytkp™
+
+set -e
+LB='\033[1;34m'
+LG='\033[1;32m'
+case $1 in
+    "") cd /home/looney/popcorntime
+         ./Popcorn-Time
+         echo;;
+    "-r"|"--remove") rm -r /home/$USER/popcorntime
+                     sudo rm -f /usr/bin/popcorntime
+                     sleep 0.3 && echo
+                     echo -e "${LG}Popcorn Time is uninstalled"
+                     echo -e "Reinstall it again here: ${LB}https://github.com/looneytkp/popcorntime"
+                     echo;;
+    "-u"|"--update") ;;
+    "--help") echo "${LG}Usage: ${LB}popcorntime [OPTION]..."
+              echo "${LG}Typing ${LB}'popcorntime' ${LG}launches the Popcorn Time application, arguments are below"
+              echo "${LB}-u; --update         ${LG}checks for updates."
+              echo "${LB}-r; --remove         ${LG}uninstalls Popcorn Time."
+              echo "${LB}--help               ${LG}open the help page"
+              echo "example: ${LB}popcorntime -u ${LG}or ${LB}popcorntime --update ${LG}to update Popcorn Time"
+              echo;;
+    *) echo -e ;;
+esac
+
