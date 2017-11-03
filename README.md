@@ -18,6 +18,7 @@ Assuming you have downloaded the script, head over to the instructions below.
 3. Enjoy...
 
 P.S: Enable permissions if it gives a "permission denied" error.
-How to in terminal.
+#### How to in terminal
 32bit: chmod 755 popcorn32
+
 64bit: chmod 755 popcorn64
