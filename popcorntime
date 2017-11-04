@@ -30,8 +30,7 @@ case $1 in
           esac
           else
               cd /home/looney/popcorntime
-              ./Popcorn-Time | echo -e "${LG}Popcorn Time is running"
-              echo -e "${LG}Exited"
+              ./Popcorn-Time
         fi;;
     "-r"|"--remove") rm -r /home/$USER/popcorntime
                      sudo rm -f /usr/bin/popcorntime
