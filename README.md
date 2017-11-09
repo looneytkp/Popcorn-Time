@@ -9,12 +9,12 @@ Assuming you have downloaded the script, head over to the instructions below.
 
 #### 32bit PC
 1. Place the downloaded file in the same folder where the script is // Or create a specific folder and place both files in it.
-2. Double click and run the "popcorn32.sh" script // Or open terminal in that particular folder and type " bash popcorn32.sh " without quotes.
+2. Double click and run the "popcorn32.sh" script // Or open terminal in that particular folder and type " bash popcorn32.sh " without quotes. " bash popcorn32.sh --help " for more info
 3. Enjoy...
 
 #### 64bit PC
 1. Place the downloaded file in the same folder where the script is // Or create a specific folder and place both files in it.
-2. Double click and run the "popcorn64.sh" script // Or open terminal in that particular folder and type " bash popcorn64.sh " without quotes.
+2. Double click and run the "popcorn64.sh" script // Or open terminal in that particular folder and type " bash popcorn64.sh " without quotes. " bash popcorn64.sh --help " for more info
 3. Enjoy...
 
 P.S: Enable permissions if it gives a "permission denied" error.
