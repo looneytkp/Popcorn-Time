@@ -1,0 +1,191 @@
+#!/bin/bash
+# v5.0 final by looneytkp™
+set -e
+NC='\033[0m'
+Y='\033[1;33m'
+LC='\033[1;36m'
+LR='\033[1;31m'
+LB='\033[1;34m'
+LG='\033[1;32m'
+bit=$(uname -m)
+start64() {
+sleep 0.5
+echo -e "
+"
+echo -e "                    ${LC}Popcorn Time for 64bit PC"
+echo -e "                                 by looneytkp${NC}"
+echo
+}
+start32() {
+sleep 0.5
+echo -e "
+"
+echo -e "                    ${LC}Popcorn Time for 32bit PC"
+echo -e "                                 by looneytkp${NC}"
+echo
+}
+cde() {
+	NAME="Popcorn Time"
+	COMMENT="Watch Movies and TV Shows instantly!"
+
+	CURRENT_DIR=$(pwd)
+	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
+	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
+
+	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
+
+	echo "[Desktop Entry]" > $DESKTOP_FILE
+	echo "Version=1.0" >> $DESKTOP_FILE
+	echo "Type=Application" >> $DESKTOP_FILE
+	echo "Name=$NAME" >> $DESKTOP_FILE
+	echo "Icon=$ICON_PATH" >> $DESKTOP_FILE
+	echo "Exec=\"$EXECUTABLE\" %U" >> $DESKTOP_FILE
+	echo "Comment=$COMMENT" >> $DESKTOP_FILE
+	echo "Categories=Multimedia;" >> $DESKTOP_FILE
+	echo "Terminal=false" >> $DESKTOP_FILE
+}
+lch() {
+echo
+shopt -u nocasematch
+printf "Launch Popcorn Time ?" && read -p "(Y)es/(N)o > " resp;
+case $resp in
+    y|yes) sleep 1
+       echo "Launching..."
+       ./Popcorn-Time
+       instcomp;;
+    n|no) instcomp;;
+    *) echo "Invalid input" && lch;;
+esac
+}
+instcomp() {
+cd -
+sudo gtk-update-icon-cache /usr/share/icons/hicolor
+if [ ! -f /usr/bin/popcorntime ]; then
+  sudo cp popcorntime /usr/bin/popcorntime
+  cd /usr/bin
+  sudo chmod 755 popcorntime
+  else
+      sudo rm /usr/bin/popcorntime
+      sudo cp popcorntime /usr/bin/popcorntime
+      cd /usr/bin
+      sudo chmod 755 popcorntime
+fi
+echo && sleep 0.5
+echo -e "GTK icon cache updated, you should find Popcorn Time in your applist."
+echo -e "Type popcorntime -i / --info in terminal for more info."
+echo "Enjoy :)"
+sleep 0.5 && echo
+echo "                    ${LC}Installation complete!${NC}"
+echo
+sleep 1
+}
+case $1 in
+    "") if [ $bit = "x86_64" ]; then
+	  if [ -d /home/$USER/popcorntime ]; then
+            rm -rf /home/$USER/popcorntime && mkdir /home/$USER/popcorntime
+            else
+                mkdir /home/$USER/popcorntime
+          fi
+          cd / && cd ~/Downloads
+	  start64
+          echo -e "OS Architecture: ${LG}64bit${NC}"
+	  if [ -f Popcorn-Time-64* ] || [ -f popcorn64.tar.gz ]; then
+	    cp Popcorn-Time-64* /home/$USER/popcorntime/popcorn64.tar.gz || cp popcorn64.tar.gz /home/$USER/popcorntime/popcorn64.tar.gz
+	    cd /home/$USER/popcorntime
+            echo "Installing..."
+            tar xf popcorn64.tar.gz &
+            pid=$! # Process Id of the running command
+            printf "["
+            i=0
+            while kill -0 $pid 2>/dev/null
+                 do
+                   i=$(( (i+1) %4 ))
+                   printf "#"
+                   sleep .4
+                   done && echo -e "] Done!"
+                   rm popcorn64.tar.gz
+                   cde && lch
+		   else
+                       echo "Downloading Popcorn Time 64 bit..."
+	               curl --output popcorn64.tar.gz -# https://dl.popcorn-time.to/Popcorn-Time-linux64.tar.gz
+	               cp popcorn64.tar.gz /home/$USER/popcorntime/popcorn64.tar.gz
+	               cd /home/$USER/popcorntime
+                       echo "Installing..."
+		       tar xf popcorn64.tar.gz &
+		       pid=$! # Process Id of the running command
+		       printf "["
+                       i=0
+                       while kill -0 $pid 2>/dev/null
+                       do
+                       i=$(( (i+1) %4 ))
+                       printf "#"
+                       sleep .4
+                       done && echo -e "] Done!"
+                       rm popcorn64.tar.gz
+                       cde && lch
+          fi
+	  else
+	      cd / && cd ~/Downloads
+	      start32
+              echo -e "OS Architecture: ${LG}32bit${NC}"
+              if [ -f Popcorn-Time-32* ] || [ -f popcorn32.tar.gz ]; then
+	        cp Popcorn-Time-32* /home/$USER/popcorntime/popcorn32.tar.gz || cp popcorn32.tar.gz /home/$USER/popcorntime/popcorn32.tar.gz
+	        cd /home/$USER/popcorntime
+                echo "Installing..."
+                tar xf popcorn32.tar.gz &
+                pid=$! # Process Id of the running command
+                printf "["
+                i=0
+                while kill -0 $pid 2>/dev/null
+                     do
+                       i=$(( (i+1) %4 ))
+                       printf "#"
+                       sleep .4
+                       done && echo -e "] Done!"
+                       rm popcorn32.tar.gz
+                       cde && lch
+		       else
+                           echo "Downloading Popcorn Time 32 bit..."
+       	                   curl --output popcorn32.tar.gz -# https://dl.popcorn-time.to/Popcorn-Time-linux32.tar.gz
+	                   cp popcorn32.tar.gz /home/$USER/popcorntime/popcorn32.tar.gz
+	                   cd /home/$USER/popcorntime
+                           echo "Installing..."
+		           tar xf popcorn32.tar.gz &
+		           pid=$! # Process Id of the running command
+		           printf "["
+                           i=0
+                           while kill -0 $pid 2>/dev/null
+                           do
+                           i=$(( (i+1) %4 ))
+                           printf "#"
+                           sleep .4
+                           done && echo -e "] Done!"
+                           rm popcorn32.tar.gz
+                           cde && lch
+              fi
+        fi;;
+    "-r"|"--remove") if [ -d /home/$USER/popcorntime ]; then
+                       rm -rf /home/$USER/popcorntime
+                           sudo rm -f /usr/bin/popcorntime
+                           sleep 0.3
+                           echo -e "Popcorn Time is uninstalled."
+                           echo -e "Reinstall it again here: ${LG}https://github.com/looneytkp/popcorntime${NC}."
+                       else
+                           echo -e "Popcorn Time is not installed, type "${LG}"y"${NC}" to install or "${LG}"n"${NC}" to ignore this"
+			   read -p "#? " ans && case $ans in
+			                            y) bash popcorn;;
+			                            n) exit;;
+			                        esac
+		     fi;;
+    "-u"|"--update") echo -e "Still under development."
+                     echo;;
+    "-i"|"--info") echo -e "Usage: popcorn [OPTION]"
+              echo -e "Typing 'popcorn'    starts installation."
+              echo -e "  ''   '-u / --update'  checks for updates."
+              echo -e "  ''   '-r / --remove'  uninstalls Popcorn Time."
+              echo -e "  ''   '-i / --info'    open the help page."
+              echo -e "example: popcorn -u / popcorn --update to update Popcorn Time.";;
+    *) echo -e "${LG}'$1'${NC} is not a valid argument."
+       echo -e "try -i / --info for more info.";;
+esac
