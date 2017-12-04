@@ -103,15 +103,16 @@ sleep 1
 case $1 in
     "") if [ ! -f Popcorn-Time-64* ]; then
           sleep 0.7 && echo
-          echo -e "${LR}Popcome time installation file not found!. Read instructions below"
-          echo && echo -e "${LC}#### 64bit PC"
-          echo "1. Put the downloaded file in the same folder where the popcorn64.sh script is."
-          echo "   Or create a specific folder and place both files in it."
-          echo
-          echo -e "2. Double click and run the "${Y}popcorn64" ${LC}script."
-          echo -e "   Or open terminal in that particular folder and type "${Y}bash popcorn64"${LC}."
-          echo -e "3. Enjoy..."
-          echo;
+          #echo -e "${LR}Popcome time installation file not found!. Read instructions below"
+          #echo && echo -e "${LC}#### 64bit PC"
+          #echo "1. Put the downloaded file in the same folder where the popcorn64.sh script is."
+          #echo "   Or create a specific folder and place both files in it."
+          #echo
+          #echo -e "2. Double click and run the "${Y}popcorn64" ${LC}script."
+          #echo -e "   Or open terminal in that particular folder and type "${Y}bash popcorn64"${LC}."
+          #echo -e "3. Enjoy..."
+          #echo;
+	  bash popcorntime
           else
               strtscrpt
               lch
