@@ -1,5 +1,6 @@
 #!/bin/bash
 # v5.0 final by looneytkp™
+
 set -e
 NC='\033[0m'
 Y='\033[1;33m'
