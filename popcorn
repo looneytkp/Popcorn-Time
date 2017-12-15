@@ -106,18 +106,11 @@ case $1 in
                    sleep .4
                    done && echo -e "] Done!"
                    
-                   cd -
-                   OS=$(uname -a | grep -o Ubuntu)
-                   if [ $OS = "ARCH" ]; then echo "Enter 1-3 as packages to be installed below"
-                     yaourt libudev.so.0
-                     else if [ $OS = "Ubuntu" ]; then sudo gdebi libudev0_175-0ubuntu9_amd64.deb
-                          fi
-                   fi
-                   #rm popcorn64.tar.gz
+                   rm popcorn64.tar.gz
                    cde && lch
 		   else
                        echo "Downloading Popcorn Time 64 bit..."
-	               curl --output popcorn64.tar.gz -# https://dl.popcorn-time.to/Popcorn-Time-linux64.tar.gz
+	               curl --output popcorn64.tar.gz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz
 	               cp popcorn64.tar.gz /home/$USER/popcorntime/popcorn64.tar.gz
 	               cd /home/$USER/popcorntime
                        echo "Installing..."
@@ -131,17 +124,7 @@ case $1 in
                        printf "#"
                        sleep .4
                        done && echo -e "] Done!"
-                       cd -
-                       OS=$(uname -a | grep -o Ubuntu)
-                       if [ $OS = "ARCH" ]; then echo "Enter 1-3 as packages to be installed below"
-                         yaourt libudev.so.0
-                         else if [ $OS = "Ubuntu" ]; then sudo gdebi libudev0_175-0ubuntu9_amd64.deb
-                              fi
-                       fi
-                       read -p "Remove downloaded file ? [Y/n] : " remove
-                       if [ $remove = y ]; then
                        rm popcorn64.tar.gz
-                       fi
                        cde && lch
           fi
 	  else
@@ -162,18 +145,11 @@ case $1 in
                        printf "#"
                        sleep .4
                        done && echo -e "] Done!"
-                       cd -
-                       OS=$(uname -a | grep -o Ubuntu)
-                       if [ $OS = "ARCH" ]; then echo "Enter 1-3 as packages to be installed below"
-                         yaourt libudev.so.0
-                         else if [ $OS = "Ubuntu" ]; then sudo gdebi libudev0_175-0ubuntu9_i386.deb
-                              fi
-                       fi
-                       #rm popcorn32.tar.gz
+                       rm popcorn32.tar.gz
                        cde && lch
 		       else
                            echo "Downloading Popcorn Time 32 bit..."
-       	                   curl --output popcorn32.tar.gz -# https://dl.popcorn-time.to/Popcorn-Time-linux32.tar.gz
+       	                   curl --output popcorn32.tar.gz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz
 	                   cp popcorn32.tar.gz /home/$USER/popcorntime/popcorn32.tar.gz
 	                   cd /home/$USER/popcorntime
                            echo "Installing..."
@@ -187,17 +163,7 @@ case $1 in
                            printf "#"
                            sleep .4
                            done && echo -e "] Done!"
-                           cd -
-                           OS=$(uname -a | grep -o Ubuntu)
-                           if [ $OS = "ARCH" ]; then echo "Enter 1-3 as packages to be installed below"
-                             yaourt libudev.so.0
-                             else if [ $OS = "Ubuntu" ]; then sudo gdebi libudev0_175-0ubuntu9_i386.deb
-                                  fi
-                           fi
-                           read -p "Remove downloaded file ? [Y/n] : " remove
-                           if [ $remove = y ]; then
                            rm popcorn32.tar.gz
-                           fi
                            cde && lch
               fi
         fi;;
