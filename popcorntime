@@ -14,12 +14,13 @@ case $1 in
               y) cd ~/Downloads
                  bit=$(uname -m)
                  if [ $bit = "x86_64" ]; then
-		   echo "Downloading Popcorn Time 64 bit..."
-                   curl --output popcorn.tar.gz -# https://dl.popcorn-time.to/Popcorn-Time-linux64.tar.gz
-                   bash popcorn64.sh
+		   echo "Downloading Popcorn Time 64bit..."
+                   wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz
                    rm popcorn.tar.gz
                    else
-                       echo "working on it"
+                       echo "Downloading Popcorn Time 32bit..."
+                       wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz
+                       rm popcorn.tar.gz
                  fi;;
                *) exit 0;;
           esac
