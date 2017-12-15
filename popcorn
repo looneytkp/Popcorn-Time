@@ -110,7 +110,7 @@ case $1 in
                    cde && lch
 		   else
                        echo "Downloading Popcorn Time 64 bit..."
-	               curl --output popcorn64.tar.xz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz
+	               curl -o ~/Downloads/popcorn64.tar.xz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz
 	               cp popcorn64.tar.gz /home/$USER/popcorntime/popcorn64.tar.gz
 	               cd /home/$USER/popcorntime
                        echo "Installing..."
@@ -149,7 +149,7 @@ case $1 in
                        cde && lch
 		       else
                            echo "Downloading Popcorn Time 32 bit..."
-       	                   curl --output popcorn32.tar.xz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz
+       	                   curl -o ~/Downloads/popcorn64.tar.xz -# https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz
 	                   cp popcorn32.tar.gz /home/$USER/popcorntime/popcorn32.tar.gz
 	                   cd /home/$USER/popcorntime
                            echo "Installing..."
