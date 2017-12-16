@@ -1,46 +1,145 @@
 #!/bin/bash
-# v5.0 final by looneytkp™
-
+# v8.7 final by looneytkp™
 set -e
 LB='\033[1;34m'
 LG='\033[1;32m'
+NC='\033[0m'
+bit=$(uname -m)
+cde() {
+	NAME="Popcorn Time"
+	COMMENT="Watch Movies and TV Shows instantly!"
+
+	CURRENT_DIR=$(pwd)
+	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
+	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
+
+	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
+
+	echo "[Desktop Entry]" > $DESKTOP_FILE
+	echo "Version=1.0" >> $DESKTOP_FILE
+	echo "Type=Application" >> $DESKTOP_FILE
+	echo "Name=$NAME" >> $DESKTOP_FILE
+	echo "Icon=$ICON_PATH" >> $DESKTOP_FILE
+	echo "Exec=\"$EXECUTABLE\" %U" >> $DESKTOP_FILE
+	echo "Comment=$COMMENT" >> $DESKTOP_FILE
+	echo "Categories=Multimedia;" >> $DESKTOP_FILE
+	echo "Terminal=false" >> $DESKTOP_FILE
+}
+shopt -u nocasematch
 case $1 in
-    "") if [ ! -d /home/$USER/popcorntime ]; then
-          echo -e "${LG}Popcorn Time is not installed, wanna download and install ? y/n"
-          echo "p.s: must have internet connection."
-          shopt -u nocasematch
-          read -p "#? " dl
+    "") if [ ! -d ~/popcorntime ]; then
+          echo
+          read -p "Popcorn Time is not installed, download ? [y/n]: " dl
           case $dl in
-              y) cd ~/Downloads
-                 bit=$(uname -m)
+              y) bit=$(uname -m)
                  if [ $bit = "x86_64" ]; then
 		   echo "Downloading Popcorn Time 64bit..."
-                   wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-64.tar.xz
-                   rm popcorn.tar.gz
+                   wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*64.tar.xz
+                   wget -O ~/Downloads/master.zip -q --show-progress https://github.com/looneytkp/popcorntime/archive/master.zip
+                   cd ~/Downloads && unzip master.zip
+                   bash popcorntime-master/popcorn
+                   rm -r master.zip popcortime-master
                    else
                        echo "Downloading Popcorn Time 32bit..."
-                       wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-0.3.10-Linux-32.tar.xz
-                       rm popcorn.tar.gz
+                       wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*32.tar.xz
+                       wget -O ~/Downloads/master.zip -q --show-progress https://github.com/looneytkp/popcorntime/archive/master.zip
+                       cd ~/Downloads && unzip master.zip
+                   bash popcorntime-master/popcorn
+                   rm -r master.zip popcortime-master
                  fi;;
                *) exit 0;;
           esac
           else
-              cd /home/$USER/popcorntime
-              ./Popcorn-Time
+              cd ~/popcorntime && ./Popcorn-Time
+              cd -
         fi;;
-    "-r"|"--remove") rm -r /home/$USER/popcorntime
+    "-r"|"--remove") echo && read -p "Do you want to uninstall Popcorn Time? [Y/n]: " remove
+                     if [ $remove = y ]; then rm -r ~/popcorntime
                      sudo rm -f /usr/bin/popcorntime
                      sleep 0.3
                      echo -e "Popcorn Time is uninstalled"
-                     echo -e "Reinstall it again here: ${LG}https://github.com/looneytkp/popcorntime${NC}";;
-    "-u"|"--update") echo -e "Still under development."
-                     echo;;
-    "-i"|"--info") echo -e "Usage: popcorntime [OPTION]..."
-              echo -e "Typing 'popcorntime'    launches the Popcorn Time application."
-              echo -e "       '-u / --update'  checks for updates."
-              echo -e "       '-r / --remove'  uninstalls Popcorn Time."
-              echo -e "       '--help'         open the help page"
-              echo -e "example: popcorntime -u or popcorntime --update to update Popcorn Time";;
+                     echo -e "Reinstall it again here: ${LG}https://github.com/looneytkp/popcorntime${NC}"
+                     echo
+                     fi;;
+    "-u"|"--update") if [ -d ~/popcorntime ]; then echo && echo "Checking for updatings..."
+                       wget -O ~/popcorntime/index.html -q -F https://popcorntime.sh
+                       cd ~/popcorntime
+                       if [ $bit = "x86_64" ]; then 
+                         md5=$(md5sum index.html)
+                         if grep -q "$md5" md5_64; then echo "Latest version is installed."
+                           echo
+                           else read -p "New update available, download ? [Y/n] " dl2
+                           if [ $dl2 = y ]; then echo "Updating..."
+                             wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*64.tar.xz
+                             cp {md5_64,index.html} ~/Downloads/
+                             rm -rf ~/popcorntime/*
+                             cp ~/Downloads/{md5_64,index.html} ~/popcorntime/
+                             cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
+                             tar xf popcorn64.tar.gz &
+                             pid=$! # Process Id of the running command
+                             printf "["
+                             i=0
+                             while kill -0 $pid 2>/dev/null
+                                  do
+                                    i=$(( (i+1) %4 ))
+                                    printf "#"
+                                    sleep .4
+                                  done && echo -e "] Done!"
+                                  echo $md5 > md5_64
+                                  rm popcorn64.tar.gz index.html
+                                  cde
+                                  sudo gtk-update-icon-cache /usr/share/icons/hicolor
+                                  echo
+                                  echo "Popcorn Time has been updated"
+                                  read -p "Launch it? [Y/n] ? " launch
+                                  if [ $lauch = y ]; then ./Popcorn-Time; fi
+                             else exit
+                           fi
+                         fi
+                         else md5=$(md5sum index.html)
+                             if grep -q "$md5" md5_32; then echo "Latest version is installed."
+                               echo
+                               else read -p "New update available, download ? [Y/n]" dl2
+                                   if [ $dl2 = y ]; then echo "Updating..."
+                                     wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*32.tar.xz
+                                     cp {md5_32,index.html} ~/Downloads/
+                                     rm -rf ~/popcorntime/*
+                                     cp ~/Downloads/{md5_32,index.html} ~/popcorntime/
+                                     cp ~/Downloads/popcorn32.tar.xz ~/popcorntime/popcorn32.tar.xz
+                                     tar xf popcorn32.tar.gz &
+                                     pid=$! # Process Id of the running command
+                                     printf "["
+                                     i=0
+                                     while kill -0 $pid 2>/dev/null
+                                          do
+                                            i=$(( (i+1) %4 ))
+                                            printf "#"
+                                            sleep .4
+                                          done && echo -e "] Done!"
+                                          echo $md5 > md5_32
+                                          rm popcorn32.tar.gz index.html
+                                          cde
+                                          sudo gtk-update-icon-cache /usr/share/icons/hicolor
+                                          echo
+                                          echo "Popcorn Time has been updated"
+                                          read -p "Launch it? [Y/n] ? " launch
+                                          if [ $lauch = y ]; then ./Popcorn-Time; fi
+                                     else exit
+                                   fi
+                             fi
+                       fi
+                       else
+                           bash popcorntime
+                     fi;;
+    "-i"|"--info") echo
+              echo "Usage: popcorntime [OPTION]..."
+              echo "Typing 'popcorntime'       launches the Popcorn Time application."
+              echo "       '-u'                checks for updates."
+              echo "       '-r'                uninstalls Popcorn Time."
+              echo "       '-i'                open the help page"
+              echo -e "example: 'popcorntime -u' to check for updates"
+              echo;;
     *) echo -e "${LG}'$1'${NC} is not a valid argument."
-       echo -e "try -i / --info for more info";;
+       echo -e "try '-i' for more info";;
 esac
