@@ -105,6 +105,8 @@ case $1 in
                    rm popcorn64.tar.xz
                    cde && lch
                    else
+                       read -p "Download ? [Y/n] " down
+                       if [ $down = y ]; then
                        echo "Downloading Popcorn Time 64bit..."
                        wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*64.tar.xz
                        cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
@@ -122,6 +124,7 @@ case $1 in
                        done && echo -e "] Done!"
                        rm popcorn64.tar.xz index.html
                        cde && lch
+                       fi
        fi
        else
            start32
@@ -143,6 +146,8 @@ case $1 in
                        rm popcorn32.tar.xz
                        cde && lch
                        else
+                           read -p "Download ? [Y/n] " down
+                           if [ $down = y ]; then
                            echo "Downloading Popcorn Time 32bit..."
        	                   wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress https://get.popcorntime.sh/build/Popcorn-Time-.*32.tar.xz
        	                   cp popcorn32.tar.xz ~/popcorntime/popcorn32.tar.xz
@@ -160,6 +165,7 @@ case $1 in
                            done && echo -e "] Done!"
                            rm popcorn32.tar.xz index.html
                            cde && lch
+                           fi
            fi
         fi;;
 esac
