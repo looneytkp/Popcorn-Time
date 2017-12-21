@@ -100,7 +100,7 @@ case $1 in
             grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' ~/Downloads/index.txt)
             echo "downloading Popcorn Time 64bit."
             wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress "$grab64"
-            rm index*
+            rm ~/Downloads/index*
             cp popcorn64.tar.xz ~/popcorntime/
             cd ~/popcorntime && echo "Installing..." 
             #wget -q -F https://popcorntime.sh && md5sum index.html > md5_64
@@ -129,7 +129,7 @@ case $1 in
            grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' ~/Downloads/index.txt)
        	   echo "downloading Popcorn Time 32bit."
        	   wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress "$grab32"
-       	   rm index*
+       	   rm ~/Downloads/index*
        	   cp popcorn32.tar.xz ~/popcorntime/
        	   cd ~/popcorntime && echo "Installing..."
        	  # wget -q -F https://popcorntime.sh && md5sum index.html > md5_32
