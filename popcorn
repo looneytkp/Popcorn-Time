@@ -62,27 +62,28 @@ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 echo && sleep 0.5
 echo -e "GTK icon cache updated, you should find Popcorn Time in your applist."
 echo "To uninstall it, delete the popcorntime folder in you /Home directory"
-read -p "Do you want to install a process that checks for updates? [Y/n] - " updt
-if [ $updt = y ]; then
-cd -
-if [ ! -f /usr/bin/popcorntime ]; then
+#read -p "Do you want to install a process that checks for updates? [Y/n] - " updt
+#if [ $updt = y ]; then
+#cd -
+#if [ ! -f /usr/bin/popcorntime ]; then
   
-  sudo cp popcorntime /usr/bin/popcorntime
-  cd /usr/bin
-  sudo chmod 755 popcorntime
-  echo "Done installing, enjoy :)"
-  popcorntime -i
-  else sudo rm /usr/bin/popcorntime
-      sudo cp popcorntime /usr/bin/popcorntime
-      cd /usr/bin
-      sudo chmod 755 popcorntime
-      echo "Done installing, enjoy :)"
-      popcorntime -i
-fi
-else echo "Enjoy :)"
-fi
-sleep 0.5 && echo
-echo "                    ${LC}Installation complete!${NC}"
+#  sudo cp popcorntime /usr/bin/popcorntime
+#  cd /usr/bin
+#  sudo chmod 755 popcorntime
+#  echo "Done installing, enjoy :)"
+#  popcorntime -i
+#  else sudo rm /usr/bin/popcorntime
+#      sudo cp popcorntime /usr/bin/popcorntime
+#      cd /usr/bin
+#      sudo chmod 755 popcorntime
+#      echo "Done installing, enjoy :)"
+#      popcorntime -i
+#fi
+#else 
+echo "Enjoy :)"
+#fi
+sleep 0.5
+echo -e "                    ${LC}Installation complete!${NC}"
 echo
 sleep 1
 }
@@ -101,7 +102,7 @@ case $1 in
             echo "downloading Popcorn Time 64bit."
             wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress "$grab64"
             rm ~/Downloads/index*
-            cp popcorn64.tar.xz ~/popcorntime/
+            cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/
             cd ~/popcorntime && echo "Installing..." 
             #wget -q -F https://popcorntime.sh && md5sum index.html > md5_64
             tar xf popcorn64.tar.xz &
@@ -130,7 +131,7 @@ case $1 in
        	   echo "downloading Popcorn Time 32bit."
        	   wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress "$grab32"
        	   rm ~/Downloads/index*
-       	   cp popcorn32.tar.xz ~/popcorntime/
+       	   cp ~/Downloads/popcorn32.tar.xz ~/popcorntime/
        	   cd ~/popcorntime && echo "Installing..."
        	  # wget -q -F https://popcorntime.sh && md5sum index.html > md5_32
        	   tar xf popcorn32.tar.xz &
