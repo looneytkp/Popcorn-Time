@@ -43,19 +43,23 @@ echo "To uninstall it, delete the popcorntime folder in you /Home directory";ech
 echo -e "                    ${LC}Installation complete!${NC}";echo;sleep 1
 }
 if [ ! -d ~/popcorntime ];then mkdir ~/popcorntime;else rm -rf ~/popcorntime;mkdir ~/popcorntime;fi
+cd ~/popcorntime;
 if [ $bit = "x86_64" ]; then start64;echo -e "OS Architecture: ${LG}64bit${NC}";read -p "Download ? [Y/n] " down
-if [ $down = y ]; then printf "Checking files...";wget -O ~/Downloads/index.html -q popcorntime.sh
-sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
-grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' ~/Downloads/index.txt);echo "downloading Popcorn Time 64bit."
-wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress "$grab64";rm ~/Downloads/index*
-cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/;cd ~/popcorntime && echo "Installing...";tar xf popcorn64.tar.xz &
+if [ $down = y ]; then printf "Checking files...";wget -q popcorntime.sh
+sed -n '35p' index.html > index.txt
+grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' index.txt);echo "downloading Popcorn Time 64bit."
+wget -q --show-progress "$grab64";mv Popcorn-Time-* popcorn64.tar.xz;rm index*
+echo "Installing...";tar xf popcorn64.tar.xz &
 printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done && echo -e "] Done!"
-rm popcorn64.tar.xz ~/Downloads/popcorn64.tar.xz;cde;lch;fi;
+rm popcorn64.tar.xz;
+cde;lch;fi;
 else start32;echo -e "OS Architecture: ${LG}32bit${NC}";read -p "Download ? [Y/n] " down;if [ $down = y ]; then
-printf "Checking files...";echo "downloading Popcorn Time 32bit.";wget -O ~/Downloads/index.html -q popcorntime.sh
-sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
-grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' ~/Downloads/index.txt);echo "downloading Popcorn Time 32bit."
-wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress "$grab32";rm ~/Downloads/index*
-cp ~/Downloads/popcorn32.tar.xz ~/popcorntime/;cd ~/popcorntime && echo "Installing...";tar xf popcorn32.tar.xz &
+printf "Checking files...";echo "downloading Popcorn Time 32bit.";wget -q popcorntime.sh
+sed -n '35p' index.html > index.txt
+grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' index.txt);echo "downloading Popcorn Time 32bit."
+wget -q --show-progress "$grab64";mv Popcorn-Time-* popcorn32.tar.xz;mv Popcorn-Time-* popcorn32.tar.xz;
+rm index*;
+echo "Installing...";tar xf popcorn32.tar.xz &
 pid=$!;printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done;echo -e "] Done!"
-rm popcorn32.tar.xz ~/Downloads/popcorn32.tar.xz;cde;lch;fi;fi;
+rm popcorn32.tar.xz;
+cde;lch;fi;fi;
