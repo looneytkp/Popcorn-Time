@@ -1,40 +1,27 @@
 #!/bin/bash
-# v8.7 final by looneytkp™
+# v8.8 by looneytkp™
 set -e
-NC='\033[0m'
-Y='\033[1;33m'
-LC='\033[1;36m'
-LR='\033[1;31m'
-LB='\033[1;34m'
-LG='\033[1;32m'
-bit=$(uname -m)
+NC='\033[0m';Y='\033[1;33m';LC='\033[1;36m';LR='\033[1;31m';LB='\033[1;34m';LG='\033[1;32m';bit=$(uname -m)
 start64() {
-sleep 0.5
-echo -e "
+sleep 0.5;echo -e "
 "
 echo -e "                    ${LC}Popcorn Time for 64bit PC"
-echo -e "                                 by looneytkp${NC}"
-echo
+echo -e "                                 by looneytkp${NC}";echo
 }
 start32() {
-sleep 0.5
-echo -e "
+sleep 0.5;echo -e "
 "
 echo -e "                    ${LC}Popcorn Time for 32bit PC"
-echo -e "                                 by looneytkp${NC}"
-echo
+echo -e "                                 by looneytkp${NC}";echo
 }
 cde() {
 	NAME="Popcorn Time"
 	COMMENT="Watch Movies and TV Shows instantly!"
-
 	CURRENT_DIR=$(pwd)
 	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
 	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
-
 	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
 	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
-
 	echo "[Desktop Entry]" > $DESKTOP_FILE
 	echo "Version=1.0" >> $DESKTOP_FILE
 	echo "Type=Application" >> $DESKTOP_FILE
@@ -46,106 +33,29 @@ cde() {
 	echo "Terminal=false" >> $DESKTOP_FILE
 }
 lch() {
-echo
-shopt -u nocasematch
-read -p "Launch Popcorn Time ? (Y)es/(N)o > " resp;
-case $resp in
-    y|yes) sleep 1
-       echo "Launching..."
-       ./Popcorn-Time
-       instcomp;;
-    n|no) instcomp;;
-esac
+echo;shopt -u nocasematch;read -p "Launch Popcorn Time ? (Y)es/(N)o > " resp;case $resp in y|yes) sleep 1
+echo "Launching...";./Popcorn-Time;instcomp;;n|no) instcomp;;esac
 }
 instcomp() {
-sudo gtk-update-icon-cache /usr/share/icons/hicolor
-echo && sleep 0.5
+sudo gtk-update-icon-cache /usr/share/icons/hicolor;echo && sleep 0.5
 echo -e "GTK icon cache updated, you should find Popcorn Time in your applist."
-echo "To uninstall it, delete the popcorntime folder in you /Home directory"
-#read -p "Do you want to install a process that checks for updates? [Y/n] - " updt
-#if [ $updt = y ]; then
-#cd -
-#if [ ! -f /usr/bin/popcorntime ]; then
-  
-#  sudo cp popcorntime /usr/bin/popcorntime
-#  cd /usr/bin
-#  sudo chmod 755 popcorntime
-#  echo "Done installing, enjoy :)"
-#  popcorntime -i
-#  else sudo rm /usr/bin/popcorntime
-#      sudo cp popcorntime /usr/bin/popcorntime
-#      cd /usr/bin
-#      sudo chmod 755 popcorntime
-#      echo "Done installing, enjoy :)"
-#      popcorntime -i
-#fi
-#else 
-echo "Enjoy :)"
-#fi
-sleep 0.5
-echo -e "                    ${LC}Installation complete!${NC}"
-echo
-sleep 1
+echo "To uninstall it, delete the popcorntime folder in you /Home directory";echo "Enjoy :)";sleep 0.5
+echo -e "                    ${LC}Installation complete!${NC}";echo;sleep 1
 }
-if [ ! -d ~/popcorntime ];then mkdir ~/popcorntime;else
-rm -rf ~/popcorntime;mkdir ~/popcorntime;fi
-case $1 in
-    "") if [ $bit = "x86_64" ]; then
-          start64
-          echo -e "OS Architecture: ${LG}64bit${NC}"
-          read -p "Download ? [Y/n] " down
-          if [ $down = y ]; then
-            printf "Checking files..."
-            wget -O ~/Downloads/index.html -q popcorntime.sh
-            sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
-            grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' ~/Downloads/index.txt)
-            echo "downloading Popcorn Time 64bit."
-            wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress "$grab64"
-            rm ~/Downloads/index*
-            cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/
-            cd ~/popcorntime && echo "Installing..." 
-            #wget -q -F https://popcorntime.sh && md5sum index.html > md5_64
-            tar xf popcorn64.tar.xz &
-            pid=$! # Process Id of the running command
-            printf "["
-            i=0
-            while kill -0 $pid 2>/dev/null
-            do
-              i=$(( (i+1) %4 ))
-               printf "#"
-               sleep .4
-            done && echo -e "] Done!"
-            rm popcorn64.tar.xz ~/Downloads/popcorn64.tar.xz
-            cde && lch
-          fi
-       else
-           start32
-           echo -e "OS Architecture: ${LG}32bit${NC}"
-           read -p "Download ? [Y/n] " down
-           if [ $down = y ]; then
-           printf "Checking files..."
-           echo "downloading Popcorn Time 32bit."
-           wget -O ~/Downloads/index.html -q popcorntime.sh
-           sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
-           grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' ~/Downloads/index.txt)
-       	   echo "downloading Popcorn Time 32bit."
-       	   wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress "$grab32"
-       	   rm ~/Downloads/index*
-       	   cp ~/Downloads/popcorn32.tar.xz ~/popcorntime/
-       	   cd ~/popcorntime && echo "Installing..."
-       	  # wget -q -F https://popcorntime.sh && md5sum index.html > md5_32
-       	   tar xf popcorn32.tar.xz &
-	   pid=$! # Process Id of the running command
-           printf "["
-           i=0
-           while kill -0 $pid 2>/dev/null
-           do
-             i=$(( (i+1) %4 ))
-             printf "#"
-             sleep .4
-             done && echo -e "] Done!"
-             rm popcorn32.tar.xz ~/Downloads/popcorn32.tar.xz
-             cde && lch
-             fi
-        fi;;
-esac
+if [ ! -d ~/popcorntime ];then mkdir ~/popcorntime;else rm -rf ~/popcorntime;mkdir ~/popcorntime;fi
+if [ $bit = "x86_64" ]; then start64;echo -e "OS Architecture: ${LG}64bit${NC}";read -p "Download ? [Y/n] " down
+if [ $down = y ]; then printf "Checking files...";wget -O ~/Downloads/index.html -q popcorntime.sh
+sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
+grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' ~/Downloads/index.txt);echo "downloading Popcorn Time 64bit."
+wget -O ~/Downloads/popcorn64.tar.xz -q --show-progress "$grab64";rm ~/Downloads/index*
+cp ~/Downloads/popcorn64.tar.xz ~/popcorntime/;cd ~/popcorntime && echo "Installing...";tar xf popcorn64.tar.xz &
+printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done && echo -e "] Done!"
+rm popcorn64.tar.xz ~/Downloads/popcorn64.tar.xz;cde;lch;fi;
+else start32;echo -e "OS Architecture: ${LG}32bit${NC}";read -p "Download ? [Y/n] " down;if [ $down = y ]; then
+printf "Checking files...";echo "downloading Popcorn Time 32bit.";wget -O ~/Downloads/index.html -q popcorntime.sh
+sed -n '35p' ~/Downloads/index.html > ~/Downloads/index.txt
+grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' ~/Downloads/index.txt);echo "downloading Popcorn Time 32bit."
+wget -O ~/Downloads/popcorn32.tar.xz -q --show-progress "$grab32";rm ~/Downloads/index*
+cp ~/Downloads/popcorn32.tar.xz ~/popcorntime/;cd ~/popcorntime && echo "Installing...";tar xf popcorn32.tar.xz &
+pid=$!;printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done;echo -e "] Done!"
+rm popcorn32.tar.xz ~/Downloads/popcorn32.tar.xz;cde;lch;fi;fi;
