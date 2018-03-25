@@ -1,19 +1,23 @@
 #!/bin/bash
-# v8.8 by looneytkp™
+# v4.0 by looneytkp™
 set -e
 NC='\033[0m';Y='\033[1;33m';LC='\033[1;36m';LR='\033[1;31m';LB='\033[1;34m';LG='\033[1;32m';bit=$(uname -m)
+shopt -u nocasematch
+
 start64() {
 sleep 0.5;echo -e "
 "
-echo -e "                    ${LC}Popcorn Time for 64bit PC"
-echo -e "                                 by looneytkp${NC}";echo
+echo -e "-                    ${LC}Popcorn Time for 64bit PC"
+echo -e "${NC}-                                 ${LC}by looneytkp${NC}";echo
 }
+
 start32() {
 sleep 0.5;echo -e "
 "
-echo -e "                    ${LC}Popcorn Time for 32bit PC"
-echo -e "                                 by looneytkp${NC}";echo
+echo -e "-                    ${LC}Popcorn Time for 32bit PC"
+echo -e "${NC}-                                 ${LC}by looneytkp${NC}";echo
 }
+
 cde() {
 	NAME="Popcorn Time"
 	COMMENT="Watch Movies and TV Shows instantly!"
@@ -32,32 +36,210 @@ cde() {
 	echo "Categories=Multimedia;" >> $DESKTOP_FILE
 	echo "Terminal=false" >> $DESKTOP_FILE
 }
+
 lch() {
-echo;shopt -u nocasematch;read -p "Launch Popcorn Time ? (Y)es/(N)o > " resp;case $resp in y|yes) sleep 1
-echo "Launching...";./Popcorn-Time;instcomp;;n|no) instcomp;;esac
+echo;read -p "- Launch Popcorn Time ? (Y)es/(N)o > " resp;case $resp in y|yes) echo "- Launching...";
+./Popcorn-Time;instcomp;;n|no) instcomp;;esac
 }
+
 instcomp() {
-sudo gtk-update-icon-cache /usr/share/icons/hicolor;echo && sleep 0.5
-echo -e "GTK icon cache updated, you should find Popcorn Time in your applist."
-echo "To uninstall it, delete the popcorntime folder in you /Home directory";echo "Enjoy :)";sleep 0.5
-echo -e "                    ${LC}Installation complete!${NC}";echo;
-if [ -e popcorn64.tar.xz ]; then rm popcorn64.tar.xz;elif [ -e popcorn32.tar.xz ];then rm popcorn32.tar.xz;fi
-sleep 1
+echo
+echo "- Creating Desktop Entry..."
+sudo gtk-update-icon-cache /usr/share/icons/hicolor;
+echo && sleep 0.5
+if [ -e Popcorn\-Time*\.tar\.xz -o popcorn*.tar.xz -o ~/Downloads/Popcorn\-Time*\.tar\.xz -o ~/Downloads/popcorn*.tar.xz ];then
+read -p "- Delete downloaded file ? (Y)es/(N)o > " del
+case $del in
+    y|yes) if [ -e Popcorn\-Time*\.tar\.xz ];then rm Popcorn\-Time*\.tar\.xz;fi
+           if [ -e ~/Downloads/Popcorn\-Time*\.tar\.xz ];then rm ~/Downloads/Popcorn\-Time*\.tar\.xz;fi
+           if [ -e popcorn*.tar.xz ];then rm popcorn*.tar.xz;fi
+           if [ -e ~/Downloads/popcorn*.tar.xz ];then rm ~/Downloads/popcorn*.tar.xz;fi;;
+esac;
+fi
+echo -e "- GTK icon cache updated, you should find Popcorn Time in your applist."
+echo "- To uninstall it, delete the popcorntime folder in you /Home directory";echo "- Enjoy :)";sleep 0.5
+echo -e "-                     ${LC}Installation complete!${NC}";
+if [ -e check ];then rm check;fi
+echo;exit
 }
-if [ ! -d ~/popcorntime ];then mkdir ~/popcorntime;else rm -rf ~/popcorntime;mkdir ~/popcorntime;fi
+
+check() { curl -X POST -s --show-error -o out www.google.com 2> check | printf "";if grep -q "(6)" check;then
+echo;sleep .8;echo "- No internet connection";rm check;echo "- Aborting...";sleep 0.5;echo;exit;fi;
+}
+
+start() {
 cd ~/popcorntime;
-if [ $bit = "x86_64" ]; then start64;echo -e "OS Architecture: ${LG}64bit${NC}";read -p "Download ? [Y/n] " down
-if [ $down = y ]; then printf "Checking files...";wget -q popcorntime.sh
+if [ $bit = "x86_64" ]; then echo -e "- OS Architecture: ${LG}64bit${NC}";install64
+else echo -e "- OS Architecture: ${LG}32bit${NC}";install32
+fi
+}
+extract() {
+echo "- Installing...";tar xf popcorn*.tar.xz &
+pid=$!;printf "[";i=0;while kill -0 $pid 2>/dev/null;
+do i=$(( (i+1) %4 ));printf "#";sleep .5;done;echo -e "] Done!";cde;lch
+}
+
+install64() {
+if [ -e ~/Downloads/Popcorn\-Time*\.tar\.xz ];then
+mv ~/Downloads/Popcorn\-Time*\.tar\.xz ~/popcorntime/popcorn64.tar.xz
+cd ~/popcorntime
+extract
+elif [ -e Popcorn\-Time*\.tar\.xz ]; then
+mv Popcorn\-Time*\.tar\.xz popcorn64.tar.xz
+extract
+elif [ -e ~/Downloads/popcorn64.tar.xz ]; then
+mv ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
+extract
+elif [ -e popcorn64.tar.xz ];then
+extract
+else echo
+echo "- Popcorn package can not be found"
+read -p "- Do you want to download it ? [Y/n]> " down
+if [ $down = y ]; then printf "%b" "- Checking connection...";check;wget -q popcorntime.sh
 sed -n '35p' index.html > index.txt
-grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' index.txt);echo "downloading Popcorn Time 64bit."
-wget -q --show-progress "$grab64";mv Popcorn-Time-* popcorn64.tar.xz;rm index*
-echo "Installing...";tar xf popcorn64.tar.xz &
-printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done && echo -e "] Done!";cde;lch;fi;
-else start32;echo -e "OS Architecture: ${LG}32bit${NC}";read -p "Download ? [Y/n] " down;if [ $down = y ]; then
-printf "Checking files...";echo "downloading Popcorn Time 32bit.";wget -q popcorntime.sh
+grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' index.txt);
+echo "downloading Popcorn Time 64bit..."
+check;wget -q --show-progress "$grab64";mv Popcorn-Time-* popcorn64.tar.xz;rm index*
+extract
+else echo "- Installation aborted";echo;exit;fi;fi
+}
+
+install32() {
+if [ -e ~/Downloads/Popcorn\-Time*\.tar\.xz ];then
+mv ~/Downloads/Popcorn\-Time*\.tar\.xz ~/popcorntime/popcorn32.tar.xz
+cd ~/popcorntime
+extract
+elif [ -e Popcorn\-Time*\.tar\.xz ]; then
+mv Popcorn\-Time*\.tar\.xz popcorn32.tar.xz
+extract
+elif [ -e ~/Downloads/popcorn32.tar.xz ]; then
+mv ~/Downloads/popcorn32.tar.xz ~/popcorntime/popcorn32.tar.xz
+extract
+elif [ -e popcorn32.tar.xz ]; then
+extract
+else echo
+echo "- Popcorn package can not be found"
+read -p "- Do you want to download it ? [Y/n]> " down
+if [ $down = y ]; then printf "%b" "- Checking connection...";check;wget -q popcorntime.sh
 sed -n '35p' index.html > index.txt
 grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' index.txt);echo "downloading Popcorn Time 32bit."
-wget -q --show-progress "$grab64";mv Popcorn-Time-* popcorn32.tar.xz;mv Popcorn-Time-* popcorn32.tar.xz;
-rm index*;
-echo "Installing...";tar xf popcorn32.tar.xz &
-pid=$!;printf "[";i=0;while kill -0 $pid 2>/dev/null;do i=$(( (i+1) %4 ));printf "#";sleep .4;done;echo -e "] Done!";cde;lch;fi;fi;
+echo "downloading Popcorn Time 32bit..."
+check;wget -q --show-progress "$grab32";mv Popcorn-Time-* popcorn32.tar.xz;rm index*
+extract
+else echo "- Installation aborted";echo;exit;fi;fi
+}
+
+reinstall() {
+read -p "- Reinstall ? (Y)es/(N)o > " rs
+case $rs in
+    y|yes) if [ $bit = "x86_64" ];then install64;else install32;fi;;
+    n|no) echo "- Aborted";echo;exit;;
+esac
+}
+
+if [ $bit = "x86_64" ];then start64;else start32;fi
+if [ -d ~/popcorntime ];then cd ~/popcorntime;
+    echo "- Installation directory present"
+    printf "%b" "- Checking content = "
+    ls > directory_check
+    size=$(wc -l <directory_check)
+    if [ $size -lt 10 ]; then if [ $bit = "x86_64" ];then
+        echo "Empty"
+        rm directory_check;install64;exit;
+    else
+        echo "Empty"
+        rm directory_check;install32;exit;fi
+    fi
+    rm directory_check
+    echo "Not Empty"
+    echo "- Checking for errors";echo;sleep .5
+    DIR="lib locales node_modules pnacl src"
+    if [ -d lib -a -d locales -a -d node_modules -a -d pnacl -a -d src ];then
+        zip -r1q zip.zip $DIR
+        old="ab6b6a01a9e4ab3468fd2be00241dafe"
+        new=$(md5sum zip.zip|sed "s_ .*__")
+        if [ $new == $old ];then
+            sleep .5
+            rm zip.zip
+        else
+            echo "- Error found"
+            rm zip.zip
+            reinstall
+        fi
+    else
+        echo "- Error found"
+        reinstall
+    fi
+    files="chromedriver icudtl.dat minidump_stackwalk nacl_helper nacl_helper_bootstrap nacl_irt_x86_64.nexe natives_blob.bin nw_100_percent.pak nw_200_percent.pak nwjc package.json payload Popcorn-Time resources.pak snapshot_blob.bin .git.json"
+    set -- $files
+    for a in "$@"
+        do
+        if [ -e $a ]; then
+            sleep .2
+            echo "- File $a exists"
+        else
+            sleep .2
+            echo "- File $a does not exist"
+            echo
+            read -p "- Reinstall ? (Y)es/(N)o > " rs
+            case $rs in
+                y|yes) if [ $bit = "x86_64" ];then install64;else install32;fi;;
+                n|no) echo;exit;;
+            esac
+        fi
+    done
+    echo;echo "- No errors found"; sleep 1;echo
+    echo "- It looks like Popcorn Time is already installed";sleep .2
+    echo "- Do you want to launch, Update Desktop Icon or Reinstall ?";sleep .2
+    read -p "- (L)aunch / (U)pdate / (R)einstall / (C)ancel > " opt
+    case $opt in
+        l|launch) echo "- Launching...";./Popcorn-Time;echo;exit;;
+        r|reinstall) if [ $bit = "x86_64" ];then
+                        if [ -e Popcorn\-Time*\.tar\.xz ]; then
+                            mv Popcorn\-Time*\.tar\.xz ~/Downloads/popcorn64.tar.xz
+                            rm -rf *
+                            mv ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
+                            echo;install64;
+                        elif [ -e popcorn64.tar.xz ];then
+                            mv popcorn64.tar.xz ~/Downloads/popcorn64.tar.xz
+                            rm -rf *
+                            mv ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
+                            echo;install64;
+                        elif [ -e ~/Downloads/Popcorn\-Time*\.tar\.xz ]; then
+                            rm -rf *
+                            mv ~/Downloads/Popcorn\-Time*\.tar\.xz ~/popcorntime/popcorn64.tar.xz
+                            echo;install64
+                        elif [ -e ~/Downloads/popcorn64.tar.xz ]; then
+                            mv ~/Downloads/popcorn64.tar.xz ~/popcorntime/popcorn64.tar.xz
+                            echo;install64
+                        else
+                            install64
+                        fi
+                     else
+                        if [ -e Popcorn\-Time*\.tar\.xz ]; then
+                            mv Popcorn\-Time*\.tar\.xz ~/Downloads/popcorn32.tar.xz
+                            rm -rf *
+                            mv ~/Downloads/popcorn32.tar.xz ~/popcorntime/popcorn32.tar.xz
+                            echo;install32;
+                        elif [ -e popcorn32.tar.xz ];then
+                            mv popcorn32.tar.xz ~/Downloads/popcorn32.tar.xz
+                            rm -rf *
+                            mv ~/Downloads/popcorn32.tar.xz ~/popcorntime/popcorn64.tar.xz
+                            echo;install32;
+                        elif [ -e ~/Downloads/Popcorn\-Time*\.tar\.xz ]; then
+                            rm -rf *
+                            mv ~/Downloads/Popcorn\-Time*\.tar\.xz ~/popcorntime/popcorn32.tar.xz
+                            echo;install32
+                        elif [ -e ~/Downloads/popcorn32.tar.xz ]; then
+                            mv ~/Downloads/popcorn32.tar.xz ~/popcorntime/popcorn32.tar.xz
+                            echo;install32
+                        else
+                            install32
+                        fi
+                     fi;;
+        u|update) cde;instcomp;;
+        c|cancel) echo "- Cancelled";echo;exit
+    esac
+else
+    mkdir ~/popcorntime;start
+fi
