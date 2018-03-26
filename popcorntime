@@ -92,11 +92,11 @@ echo "- Installing...";
 if [ $bit = "x86_64" ]; then
     tar xf popcorn64.tar.xz &
     pid=$!;printf "%b" "- [";i=0;while kill -0 $pid 2>/dev/null;
-    do i=$(( (i+1) %4 ));printf "#";sleep .2;done;echo -e "] Done!";cde;lch
+    do i=$(( (i+1) %4 ));printf "#";sleep .3;done;echo -e "] Done!";cde;lch
 else
     tar xf popcorn32.tar.xz &
     pid=$!;printf "%b" "- [";i=0;while kill -0 $pid 2>/dev/null;
-    do i=$(( (i+1) %4 ));printf "#";sleep .2;done;echo -e "] Done!";cde;lch
+    do i=$(( (i+1) %4 ));printf "#";sleep .3;done;echo -e "] Done!";cde;lch
 fi
 }
 
@@ -155,8 +155,8 @@ if [ -e popcorn64.tar.xz -o -e popcorn32.tar.xz ];then
 else
     echo
     echo "- Popcorn Time package not downloaded."
-    read -p "- Do you want to download it ? [Y/n]> " down
-    if [ $down = y ]; then printf "%b" "- Checking connection...";check;wget -q popcorntime.sh
+    read -p "- Do you want to download it ? [Y/n]> " dl
+    if [ $dl = y ]; then printf "%b" "- Checking connection...";check;wget -q popcorntime.sh
         sed -n '35p' index.html > index.txt
         grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' index.txt);
         grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' index.txt);
