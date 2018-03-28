@@ -8,7 +8,7 @@
 
 ### Changelog
 ##### - updated to v2.0 final
-##### - junk && bad code removed
+##### - junk code removed
 ##### - rework code for faster installation
 ##### - added code to check for internet connection
 ##### - removes residuals if execution ends unsuccessfully
@@ -17,4 +17,5 @@
 ##### - fixed all bugs
 
 Incase of any errors, please copy the output on the terminal and report it here or mail it to tenphine@gmail.com
+
 Thanks
