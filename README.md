@@ -6,16 +6,6 @@
 #### 3. Follow the instructions and wait as it downloads and install the popcorn time app.
 #### ps: make sure you have an internet connection, the popcorn time package is 60.48MB.
 
-### Changelog
-##### - updated to v2.0 final
-##### - junk code removed
-##### - rework code for faster installation
-##### - added code to check for internet connection
-##### - removes residuals if execution ends unsuccessfully
-##### - option to delete downloaded package after installing
-##### - made script more dynamic
-##### - fixed all bugs
+###Incase of any errors, please copy the output on the terminal and report it here or mail it to tenphine@gmail.com.
 
-Incase of any errors, please copy the output on the terminal and report it here or mail it to tenphine@gmail.com
-
-Thanks
+##Thanks

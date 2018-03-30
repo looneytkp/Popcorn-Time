@@ -1,5 +1,5 @@
 #!/bin/bash
-# popcorntime v2.0 final by looneytkp™
+# popcorntime v2.0 final by looneytkp
 set -e
 NC='\033[0m';Y='\033[1;33m';LC='\033[1;36m';LR='\033[1;31m';LB='\033[1;34m';LG='\033[1;32m';bit=$(uname -m)
 shopt -u nocasematch
