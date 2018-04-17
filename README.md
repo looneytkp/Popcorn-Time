@@ -1,7 +1,6 @@
 # Popcorn Time
 ### A simple script to install Popcorn Time on Linux.
 ![alt text](https://github.com/looneytkp/popcorntime/blob/master/Screenshot%20from%202018-04-05%2004-53-59.png)
-![alt text](https://github.com/looneytkp/popcorntime/blob/master/Screenshot%20from%202018-04-05%2004-54-33.png)
 #### 1. Download the script, extract it and navigate to the extracted folder.
 #### 2. Double click on the popcorntime file and select "Run in terminal" or open terminal within the folder and input "bash popcorntime" without quotes.
 #### 3. Follow the instructions and wait as it downloads and install the popcorn time app.
