@@ -191,9 +191,9 @@ if [ -d ~/popcorntime ];then
     DIR="lib locales node_modules pnacl src"
     if [ -d lib -a -d locales -a -d node_modules -a -d pnacl -a -d src ];then
         zip -r1q zip.zip $DIR
-        old="301526"
+        old="301300"
         new=$(wc -l <zip.zip)
-        if [ $new == $old ];then
+        if [ $new -gt $old ];then
             set -- $DIR
             for b in "$@"
                 do
