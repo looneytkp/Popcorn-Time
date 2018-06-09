@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+
+DIR=~/.popcorntime
+
+case $1 in
+	"")
+		cd "$DIR" || exit
+		./Popcorn-Time;;
+	-u|--uninstall)
+		sudo rm -rf /usr/bin/popcorntime ~/.popcorntime
+		echo -e "Done uninstalling\\n";;
+	-d|--diagnose)
+		echo -e "\\n1. Launch Popcorn Time"
+		echo "2. Create desktop entry"
+		echo "3. Check for missing files"
+		echo "4. Reinstall Popcorn Time"
+		;;
+	-h|--help)
+	
+		;;
+esac
