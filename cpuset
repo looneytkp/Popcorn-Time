@@ -1,0 +1,181 @@
+#!/bin/bash
+set -e
+
+if [ ! -e /usr/bin/cpupower ]; then
+	sudo pacman -S cpupower
+fi
+TMP=~/.CPUSET
+case $1 in
+	"")
+		echo -e "\\nCurrent governors:"
+		_ZERO=$(cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor)
+		_ONE=$(cat /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor)
+		_TWO=$(cat /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor)
+		_THREE=$(cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor)
+		echo "CPU0: $_ZERO"
+		echo "CPU1: $_ONE"
+		echo "CPU2: $_TWO"
+		echo -e "CPU3: $_THREE\\n"
+		;;
+
+	-g)
+		case $2 in
+			"")
+				echo "error: no governor specified (use -h for help)";;
+			performance)
+				sudo cpupower frequency-set -g performance
+				#echo;cpuset
+				;;
+			powersave)
+				sudo cpupower frequency-set -g powersave
+				#echo;cpuset
+				;;
+			ondemand)
+				sudo cpupower frequency-set -g ondemand
+				#echo;cpuset
+				;;
+			conservative)
+				sudo cpupower frequency-set -g conservative
+				#echo;cpuset
+				;;
+			schedutil)
+				sudo cpupower frequency-set -g schedutil
+				#echo;cpuset
+				;;
+			*)
+				echo "error: incorrect governor: $2";;
+		esac;;
+
+	-c)
+		_CORE() {
+			sudo cpupower -c "$_CORE" frequency-set -g "$_GOV"
+		}
+		_CORE="$2"
+		_GOV="$3"
+		{	
+			echo "performance"
+			echo "powersave"
+			echo "ondemand"
+			echo "conservative"
+			echo "schedutil"
+		} > "$TMP"
+		case $2 in
+			"")
+				echo "error: no core specified (use -h for help)"
+				rm "$TMP";;
+			0)
+				if [ "$_GOV" == "" ]; then
+					echo "error: no governor specified (use -h for help)"
+				fi
+				if grep -wq "$_GOV" "$TMP"; then
+					_CORE
+					#cpuset
+				else
+					echo "error: incorrect governor: $3"
+				fi
+				rm "$TMP";;
+			1)
+				if [ "$_GOV" == "" ]; then
+					echo "error: no governor specified (use -h for help)"
+				fi
+				if grep -wq "$_GOV" "$TMP"; then
+					_CORE
+					#cpuset
+				else
+					echo "error: incorrect governor: $3"
+				fi
+				rm "$TMP";;
+			2)
+				if [ "$_GOV" == "" ]; then
+					echo "error: no governor specified (use -h for help)"
+				fi
+				if grep -wq "$_GOV" "$TMP"; then
+					_CORE
+					#cpuset
+				else
+					echo "error: incorrect governor: $3"
+				fi
+				rm "$TMP";;
+			3)
+				if [ "$_GOV" == "" ]; then
+					echo "error: no governor specified (use -h for help)"
+				fi
+				if grep -wq "$_GOV" "$TMP"; then
+					_CORE
+					#cpuset
+				else
+					echo "error: incorrect governor: $3"
+				fi
+				rm "$TMP";;
+			*)
+				echo "error: cores start from 0 to 3"
+				rm "$TMP"
+		esac;;
+
+	-s|--min|--max)
+		ONE="$1"
+		TWO="$2"
+		if [ "$TWO" == "" ]; then
+			echo
+			cpupower frequency-info|grep "hardware limits"|sed "s/  hardware/Hardware/"
+			cpupower frequency-info|grep "frequency steps"|sed "s/  available/Available/"
+			cpupower frequency-info|grep "policy"|sed "s/  current/Policy/"
+			cpupower frequency-info|grep "decide"|sed "s/                  The/The/"
+			printf "within this range."
+			read -rp "Frequency: " FREQ
+			echo "$FREQ" > "$TMP"
+			if grep -wqi "Ghz" "$TMP"; then
+				sed -i "s/ Ghz//" "$TMP"
+			else
+				FREQ=$(cat "$TMP")
+				cpupower frequency-info|
+				if grep -wq "$FREQ"; then
+					case "$ONE" in
+						-s)
+							sudo cpupower frequency-set -f "$FREQ";;
+						--min)
+							sudo cpupower frequency-set -u "$FREQ";;
+						--max)
+							sudo cpupower frequency-set -d "$FREQ";;
+					esac
+				else
+					echo "error: incorrect frequency: $FREQ"
+				fi
+			fi
+		else
+			if grep -wq "$FREQ"; then
+				case "$ONE" in
+					-s)
+						sudo cpupower frequency-set -f "$FREQ";;
+					--min)
+						sudo cpupower frequency-set -u "$FREQ";;
+					--max)
+						sudo cpupower frequency-set -d "$FREQ";;
+				esac
+			else
+				echo "error: incorrect frequency: $FREQ"
+			fi
+		fi;;
+
+	-h)
+		echo "usage:  cpuset <operation> [...]"
+		echo "operations:"
+		echo "    cpuset"
+    	echo "    cpuset <-h>"
+    	echo "    cpuset <-g>"
+    	echo "    cpuset <-g>"
+    	echo "    cpuset <-c>"
+    	echo "    cpuset <-s>"
+    	echo "    cpuset <-w>"
+    	echo "    cpuset <--min>"
+    	echo "    cpuset <--max>"
+		;;
+
+	-w)
+		#monitor cpu speed in real time
+		watch grep \"cpu MHz\" /proc/cpuinfo;;
+
+	*)
+		echo "error: incorrect governor: $1"
+		echo "(use -h for help)";;
+esac

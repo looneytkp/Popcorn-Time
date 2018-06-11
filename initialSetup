@@ -1,0 +1,98 @@
+#!/bin/bash
+set -e
+
+###zsh
+ZSH() {
+	if [[ ! -e /usr/bin/zsh ]]; then
+		sudo pacman -S zsh powerline-fonts
+		export ZSH="$HOME/.oh-my-zsh"
+		sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+		themes="peepcode suvash simonoff amuse steeef smt mira kiwi itchy pure mortalscumbag candy-kingdom intheloop trapd00r refined frisk tjkirch crcandy fino-time bureau dst frontcube re5et dstufft blinks ysx juanghurtado pmcgee rgm emotty avit 3den adben rixius junkfood"
+		set -- "$@"
+		for a in $themes
+		do
+			if [[ -e ~/.oh-my-zsh/custom/themes/"$a.zsh-theme" ]]; then
+				rm ~/.oh-my-zsh/custom/themes/"$a.zsh-theme"
+			else
+				echo "$a does not exist"
+			fi
+		done
+		cd ~/.oh-my-zsh/custom/themes
+		wget -qc --show-progress --no-clobber http://raw.github.com/caiogondim/bullet-train-oh-my-zsh-theme/master/bullet-train.zsh-theme https://raw.githubusercontent.com/tylerreckart/hyperzsh/master/hyperzsh.zsh-theme http://raw.github.com/zakaziko99/agnosterzak-ohmyzsh-theme/master/agnosterzak.zsh-theme
+		if grep -q "grub" in ~/.zshrc; then
+			echo > /dev/null
+		else
+			echo "alias update-grub="grub-mkconfig -o /boot/grub/grub.cfg"" >> ~/.zshrc
+		fi
+		if grep -q "DISABLE_UPDATE_PROMPT=true" ~/.zshrc; then
+			echo > /dev/null
+		else
+			echo "DISABLE_UPDATE_PROMPT=true" >> ~/.zshrc
+		fi
+		echo "done with zsh"
+	else
+		echo "already done with zsh"
+	fi
+}
+
+###git
+GIT() {
+	name=looneytkp
+	email=sgm4kv@gmail.com
+	if [[ ! -e /usr/bin/git ]]; then
+		sudo pacman -S git xclip
+	fi
+	if [[ ! -d ~/git ]]; then
+		mkdir ~/git
+	fi
+	cd ~/git
+	if [[ -e .done ]]; then
+		echo "already done with git"
+	else
+		git config --global user.name "$name"
+		git config --global user.email "$email"
+		git config --global color.ui true
+		ssh-keygen -t rsa -b 4096 -C "$email"
+		#chmod 400 ~/.ssh/id_rsa
+		eval "$(ssh-agent -s)"
+		ssh-add ~/.ssh/id_rsa
+		xclip -sel clip < ~/.ssh/id_rsa.pub
+		xdg-open "https://github.com/settings/keys"|ssh -vT git@github.com
+		touch .done
+		echo "done with git"
+	fi
+}
+
+###swap
+SWAP() {
+	cd ~
+	swap=~/swap.img
+	if [[ ! -e $swap ]]; then
+		touch $swap
+		read -p "Swap size: " size
+		if [[ $size -ge 3072 ]]; then
+			#If you want to make 3Gb file then change count value to count=3M
+			dd if=/dev/zero of=$swap bs=$size count=3M
+		else
+			#If you want to make 2.9Gb or less file then change count value to count=1M
+			dd if=/dev/zero of=$swap bs=$size count=1M
+		fi
+		chmod 0600 $swap
+		sudo mkswap $swap
+		sudo echo "$swap swap swap sw 0 0" > tmp
+		xclip -sel clip < tmp
+		sudo swapon $swap
+	else
+		echo "swap exists"
+	fi
+	cat /proc/swaps
+}
+
+case $1 in
+	zsh)
+		ZSH;;
+	git)
+		GIT;;
+	swap)
+		SWAP;;
+esac

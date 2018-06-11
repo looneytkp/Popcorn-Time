@@ -1,0 +1,22 @@
+#!/bin/bash
+set -e
+if [ ! -d ~/.curs ]; then
+	mkdir ~/.curs
+fi
+cd ~/.curs
+echo "Downloading cursors:"
+wget -qc --show-progress -nc "https://www.dropbox.com/s/kt3m9oil3ya1pae/hacked.tgz" "https://www.dropbox.com/s/jwjtk4ay1x1k6cn/obsidian.tgz" "https://www.dropbox.com/s/4zkuwk6xsishnoc/snow.tgz" "https://www.dropbox.com/s/hb1ivyrzyv8rz9o/capitaine.tar.gz" "https://www.dropbox.com/s/fxz6ecdmq6bj21t/theDOT.tar.xz" "https://www.dropbox.com/s/0hpd2cihzojn04t/comix.tar.xz"
+echo "Installing"
+tar xf hacked.tgz
+tar xf obsidian.tgz
+tar xf snow.tgz
+tar -xzf capitaine.tar.gz
+tar -xf theDOT.tar.xz
+tar xf comix.tar.xz
+rm ./*.tar* ./*.tgz*
+mv DOT_0.3/dark ~/.curs/dot_dark
+mv DOT_0.3/light ~/.curs/dot_light
+rm -rf DOT_0.3
+sudo mv -t /usr/share/icons Breeze-* capitaine dot* comix
+rm -rf ~/.curs
+echo "Done"
