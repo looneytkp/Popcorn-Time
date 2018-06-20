@@ -29,20 +29,19 @@ create_desktop_entry() {
 
 launch() {
 sudo -p "- [sudo] password for $USER: " gtk-update-icon-cache /usr/share/icons/hicolor;
-cd -
+cd - > /dev/null
 if [[ ! -e /usr/bin/popcorntime ]]; then
 	sudo cp .popcorntime /usr/bin/popcorntime
 else
 	sudo rm /usr/bin/popcorntime
 	sudo cp .popcorntime /usr/bin/popcorntime
 fi
-cd -
+cd - > /dev/null
 if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
     read -p "- Keep Popcorn Time package ? (Y)es/(N)o > " del
     case $del in
         n|no) 
-        		file="popcorn*.tar.xz"
-               	rm "$file";;
+               	rm popcorn*.tar.xz;;
     esac;
 fi
 read -p "- Launch Popcorn Time ? (Y)es/(N)o > " resp;
@@ -52,7 +51,7 @@ case $resp in
 esac
 rm index.html index.txt
 echo -e "\\n- Popcorn Time should be in your application list."
-echo "- Enjoy :)"
+echo "- Execute 'popcorntime -h' for some info. Enjoy :)"
 echo -e "- Installation complete!\\n";
 exit
 }
@@ -95,12 +94,21 @@ extract() {
 }
 
 installation() {
+if [ "$bit" == "x86_64" ];then
+	echo -e "\\n- Popcorn Time for 64bit PC"
+	echo -e "-              by looneytkp\\n"
+	echo -e "- OS Architecture: 64bit"
+else
+	echo -e "\\n- Popcorn Time for 32bit PC"
+	echo -e "-              by looneytkp\\n"
+	echo -e "- OS Architecture: 32bit"
+fi
 if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
 	extract
 else
 	read -p "- Download Popcorn Time package ? [Y/n]> " dl
     if [ "$dl" = y ]; then
-    	wget -q popcorntime.sh || check
+    	wget -q -nc popcorntime.sh || check
     	if [ $? == 5 ]; then
     		exit
     	fi
@@ -126,26 +134,15 @@ else
 fi
 }
 
-if [ "$bit" == "x86_64" ];then
-	echo -e "\\n- Popcorn Time for 64bit PC"
-	echo -e "-              by looneytkp\\n"
-	echo -e "- OS Architecture: 64bit"
-else
-	echo -e "\\n- Popcorn Time for 32bit PC"
-	echo -e "-              by looneytkp\\n"
-	echo -e "- OS Architecture: 32bit"
-fi
 if [ -d "$DIR" ];then
 	cd "$DIR"
 	size=$(du -sh "$DIR"|sed "s/[K...M].*//")
 	if [ "$size" -ge 301 ] && [ -e /usr/bin/popcorntime ]; then
 		echo -e "- Popcorn Time is already installed."
-		read -p "- Run diagnosis if there is a problem. Y/n > " diag
-		if [ "$diag" == y ]; then
-    		popcorntime -d
-    	else
-    		exit 0
-    	fi
+		if [ ! -e ~/.local/share/applications/popcorn-time.desktop ]; then
+			create-desktop-entry
+			echo -e "- Icon cache updated\\n"
+		fi
 	else
 		installation
 	fi

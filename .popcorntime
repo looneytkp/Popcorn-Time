@@ -2,21 +2,19 @@
 set -e
 
 DIR=~/.popcorntime
+DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
 
 case $1 in
 	"")
-		cd "$DIR" || exit
-		./Popcorn-Time;;
+		cd "$DIR" || echo "Popcorn Time directory does not exist."
+		./Popcorn-Time|| echo "Popcorn Time launcher does not exist.";;
 	-u|--uninstall)
-		sudo rm -rf /usr/bin/popcorntime ~/.popcorntime
+		sudo rm -rf /usr/bin/popcorntime ~/.popcorntime 
+		if [ -e "$DESKTOP_FILE" ]; then
+			rm "$DESKTOP_FILE"
+		fi
 		echo -e "Done uninstalling\\n";;
-	-d|--diagnose)
-		echo -e "\\n1. Launch Popcorn Time"
-		echo "2. Create desktop entry"
-		echo "3. Check for missing files"
-		echo "4. Reinstall Popcorn Time"
-		;;
 	-h|--help)
-	
 		;;
 esac
