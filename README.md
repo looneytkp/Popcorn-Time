@@ -14,4 +14,4 @@ wget -q --no-clobber -c "https://github.com/looneytkp/popcorntime/archive/master
 bash popcorntime
 ```
 3. The rest is pretty straight forward.
-###Best regards.
+### Best regards.
