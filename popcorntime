@@ -38,18 +38,13 @@ else
 fi
 cd - > /dev/null
 if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
-    read -p "- Keep Popcorn Time package ? (Y)es/(N)o > " del
-    case $del in
-        n|no) 
-               	rm popcorn*.tar.xz;;
-    esac;
+		rm popcorn*.tar.xz index.html index.txt;
 fi
 read -p "- Launch Popcorn Time ? (Y)es/(N)o > " resp;
 case $resp in
     y|yes)
     		./Popcorn-Time;;
 esac
-rm index.html index.txt
 echo -e "\\n- Popcorn Time should be in your application list."
 echo "- Execute 'popcorntime -h' for some info. Enjoy :)"
 echo -e "- Installation complete!\\n";
@@ -94,15 +89,6 @@ extract() {
 }
 
 installation() {
-if [ "$bit" == "x86_64" ];then
-	echo -e "\\n- Popcorn Time for 64bit PC"
-	echo -e "-              by looneytkp\\n"
-	echo -e "- OS Architecture: 64bit"
-else
-	echo -e "\\n- Popcorn Time for 32bit PC"
-	echo -e "-              by looneytkp\\n"
-	echo -e "- OS Architecture: 32bit"
-fi
 if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
 	extract
 else
@@ -128,7 +114,7 @@ else
     else
         if [ ! -e popcorn64.tar.xz ] || [ ! -e popcorn32.tar.xz ];then
 	        rm -rf "$DIR"
-	    fi
+	    	fi
         echo -e "- Installation aborted.\\n" && exit
     fi
 fi

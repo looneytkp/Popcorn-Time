@@ -9,10 +9,17 @@ wget -q --no-clobber -c "https://github.com/looneytkp/popcorntime/archive/master
 ```
 #### manual method:
 1. Download and extract the zip file.
-2. Double click on the popcorntime script and select "Run in terminal" or open terminal within the folder and run this command:
+2. Double click on the popcorntime script and select "Run in terminal" or open terminal within the folder and run the command:
 ```bash
 bash popcorntime
 ```
 3. The rest is pretty straight forward.
 
-Best regards
+
+
+
+
+
+
+
+Best regards.
