@@ -13,7 +13,8 @@ create_desktop_entry() {
 	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
 	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
 	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
-	DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
+	DESTINATION_DIR2=/usr/share/applications
+	DESKTOP_FILE=popcorn-time.desktop
 	echo "[Desktop Entry]" > "$DESKTOP_FILE"
 	{
 		echo "Version=1.0"
@@ -25,35 +26,37 @@ create_desktop_entry() {
 		echo "Categories=Multimedia;"
 		echo "Terminal=false" 
 	} >> "$DESKTOP_FILE"
+	if [ -d "$DESTINATION_DIR" ]; then
+		mv "$DESKTOP_FILE" "$DESTINATION_DIR"
+	else
+		sudo mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
+	fi
+	sudo -p "- [sudo] password for $USER: " gtk-update-icon-cache /usr/share/icons/hicolor;
+	cd - > /dev/null
+	if [ ! -e /usr/bin/popcorntime ]; then
+		sudo cp .popcorntime /usr/bin/popcorntime
+	else
+		sudo rm /usr/bin/popcorntime
+		sudo cp .popcorntime /usr/bin/popcorntime
+	fi
+	cd - > /dev/null
 }
 
 launch() {
-sudo -p "- [sudo] password for $USER: " gtk-update-icon-cache /usr/share/icons/hicolor;
-cd - > /dev/null
-if [[ ! -e /usr/bin/popcorntime ]]; then
-	sudo cp .popcorntime /usr/bin/popcorntime
-else
-	sudo rm /usr/bin/popcorntime
-	sudo cp .popcorntime /usr/bin/popcorntime
-fi
-cd - > /dev/null
-if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
-		rm popcorn*.tar.xz index.html index.txt;
-fi
 read -p "- Launch Popcorn Time ? (Y)es/(N)o > " resp;
 case $resp in
     y|yes)
-    		./Popcorn-Time;;
+    		./Popcorn-Time 2> /dev/null;;
 esac
 echo -e "\\n- Popcorn Time should be in your application list."
-echo "- Execute 'popcorntime -h' for some info. Enjoy :)"
+echo "- Execute 'popcorntime -h' for more info. Enjoy :)"
 echo -e "- Installation complete!\\n";
 exit
 }
 
 check() {
 wget -q --spider http://google.com |
-if [ $? -eq 0 ]; then
+if $? -eq 0; then
     echo > /dev/null
 else
     echo -e "- No internet connection\\n"
@@ -125,7 +128,7 @@ if [ -d "$DIR" ];then
 	size=$(du -sh "$DIR"|sed "s/[K...M].*//")
 	if [ "$size" -ge 301 ] && [ -e /usr/bin/popcorntime ]; then
 		echo -e "- Popcorn Time is already installed."
-		if [ ! -e ~/.local/share/applications/popcorn-time.desktop ]; then
+		if [ ! -e ~/.local/share/applications/popcorn-time.desktop ] || [ ! -e /usr/share/applications/popcorn-time.desktop ]; then
 			create-desktop-entry
 			echo -e "- Icon cache updated\\n"
 		fi

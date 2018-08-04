@@ -7,14 +7,29 @@ DESKTOP_FILE=$DESTINATION_DIR/popcorn-time.desktop
 
 case $1 in
 	"")
-		cd "$DIR" || echo "Popcorn Time directory does not exist."
-		./Popcorn-Time|| echo "Popcorn Time launcher does not exist.";;
-	-u|--uninstall)
+		cd "$DIR" || echo -e "Popcorn Time directory does not exist.\\nRun \\"popcorntime -h\\" for help"
+		./Popcorn-Time 2> /dev/null || echo -e "Popcorn Time launcher does not exist.\\nRun \\"popcorntime -h\\" for help";;
+	-U|--uninstall)
 		sudo rm -rf /usr/bin/popcorntime ~/.popcorntime 
 		if [ -e "$DESKTOP_FILE" ]; then
 			rm "$DESKTOP_FILE"
 		fi
 		echo -e "Done uninstalling\\n";;
-	-h|--help)
+		-c|--clear-cache)
+			if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
+				rm popcorn*.tar.xz index.html index.txt;
+			fi;;
+		-R|--reinstall)
+			
 		;;
+		
+		-h|--help)
+			p="popcorntime"
+			echo -e "\\nusage:	popcorntime <operation>"
+			echo "operations:"
+			echo "  $p {-h --help}          - display help info"
+			echo "  $p {-R --reinstall}     - reinstall Popcorn Time"
+			echo "  $p {-u --update}        - check for update"
+			echo "  $p {-c --clear-cache}   - clear installation cache files"
+			echo -e "  $p {-U --uninstall}     - uninstall Popcorn Time\\n"
 esac
