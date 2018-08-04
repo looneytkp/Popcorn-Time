@@ -20,8 +20,14 @@ case $1 in
 				rm popcorn*.tar.xz index.html index.txt;
 			fi;;
 		-R|--reinstall)
-			
-		;;
+			if [ -d "$DIR" ]; then
+				rm -rf "$DIR"
+			fi
+			wget -qc --no-clobber "https://github.com/looneytkp/popcorntime/archive/master.zip"
+			unzip -oq master.zip
+			cd Popcorn* && bash popcorntime && cd - > /dev/null
+			rm -rf master.zip Popcorn*;;
+			-u|--update);;
 		
 		-h|--help)
 			p="popcorntime"
