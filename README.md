@@ -1,5 +1,5 @@
 # Popcorn Time
-##This is a simple script that automates the proceedure of installing Popcorn Time on your Linux PC.
+## This is a simple script that automates the proceedure of installing Popcorn Time on your Linux PC.
 ![popcorntime image](popcorn_img.jpeg)
 ### Basic usage:
 The process can be executed using wget or by manually downloading, extracting and executing the script. Be sure to have an internet connection as it downloads the Popcorn Time package.
