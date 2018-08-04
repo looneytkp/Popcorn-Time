@@ -4,10 +4,10 @@
 The process can be executed using wget or by manually downloading, extracting and executing the script. Be sure to have an internet connection as it downloads the Popcorn Time package.
 #### Via wget:
 Copy, paste and run the any of the code below in terminal. The first code is interactive, the second is not.
-1. ```bash
+Interactive installation: ```bash
 wget -qc --no-clobber "https://github.com/looneytkp/popcorntime/archive/master.zip";unzip -oq master.zip;cd Popcorn* && bash popcorntime;cd - > /dev/null && rm -rf master.zip Popcorn*
 ```
-2. ```bash
+Non interactive installation: ```bash
 wget -qc --no-clobber "https://github.com/looneytkp/popcorntime/archive/master.zip";unzip -oq master.zip;cd Popcorn* && yes|bash popcorntime;cd - > /dev/null && rm -rf master.zip Popcorn*
 ```
 
