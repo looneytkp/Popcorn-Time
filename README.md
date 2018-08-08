@@ -6,7 +6,7 @@ The script can be executed automatically using wget or by manually downloading, 
 ##### Via wget:
 Copy, paste and run the any of the code below in terminal.
 ```bash
-wget -qc --no-clobber "https://github.com/looneytkp/popcorntime/archive/master.zip";unzip -oq master.zip;cd Popcorn* && bash popcorntime;cd - > /dev/null && rm -rf master.zip Popcorn*
+wget -qc --no-clobber "https://github.com/looneytkp/popcorntime/archive/master.zip";unzip -oq master.zip;cd Popcorn*;bash popcorntime;cd - > /dev/null;rm -rf master.zip Popcorn*
 ```
 ##### Manual method:
   * Download the zip or tar.gz file and extract it.
