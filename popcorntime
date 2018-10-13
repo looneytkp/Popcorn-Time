@@ -15,8 +15,8 @@ create_desktop_entry() {
 	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
 	DESTINATION_DIR2=/usr/share/applications
 	DESKTOP_FILE=popcorn-time.desktop
-	echo "[Desktop Entry]" > "$DESKTOP_FILE"
 	{
+	    echo "[Desktop Entry]"
 		echo "Version=1.0"
 		echo "Type=Application"
 		echo "Name=$NAME"
@@ -117,7 +117,7 @@ else
     else
         if [ ! -e popcorn64.tar.xz ] || [ ! -e popcorn32.tar.xz ];then
 	        rm -rf "$DIR"
-	    	fi
+	    fi
         echo -e "- Installation aborted.\\n" && exit
     fi
 fi
