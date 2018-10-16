@@ -45,7 +45,7 @@ def installation():
     print("- Execute 'popcorntime -h' for more info. Enjoy :)")
     print("- Installation complete!\n")
 
-
+exit("not working yet")
 if not os.path.exists(DIR):
     os.mkdir(DIR); os.chdir(DIR)
 else:
