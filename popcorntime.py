@@ -20,7 +20,7 @@ def installation():
         pkg.extractall()
     if os.path.exists("index.html"):
         os.remove("index.html", "index.txt")
-        NAME = "Popcorn Time"
+    NAME = "Popcorn Time"
     COMMENT = "Watch Movies and TV Shows instantly!"
     CURRENT_DIR = os.system("$(pwd)")
     EXECUTABLE = os.system(CURRENT_DIR + "/Popcorn-Time")
@@ -28,11 +28,11 @@ def installation():
     DESTINATION_DIR = ("/home/" + username + "/.local/share/applications")
     DESTINATION_DIR2 = "/usr/share/applications"
     DESKTOP_FILE = "popcorn-time.desktop"
-    with open(DESKTOP_FILE, "w") as df:
+    with open(DESKTOP_FILE, "a+") as df:
         df.write("[Desktop Entry]\n\nVersion=1.0\nType=Application")
-        df.append("\nName=" + NAME + "\nIcon=" + ICON_PATH)
-        df.append("\nExec=" + EXECUTABLE + "\nComment=" + COMMENT)
-        df.append("\nCategories=Multimedia;\nTerminal=false")
+        df.write("\nName=" + NAME + "\nIcon=" + ICON_PATH)
+        df.write("\nExec=" + EXECUTABLE + "\nComment=" + COMMENT)
+        df.write("\nCategories=Multimedia;\nTerminal=false")
     if os.path.exists(DESTINATION_DIR):
         os.rename(DESKTOP_FILE, DESTINATION_DIR)
     else:

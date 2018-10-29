@@ -1,0 +1,134 @@
+#!/bin/bash
+# popcorntime v2.0 final by looneytkp
+set -e
+
+bit=$(uname -m)
+DIR=~/.popcorntime
+shopt -u nocasematch
+
+create_desktop_entry() {
+	NAME="Popcorn Time"
+	COMMENT="Watch Movies and TV Shows instantly!"
+	CURRENT_DIR=$(pwd)
+	EXECUTABLE=$CURRENT_DIR/Popcorn-Time
+	ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
+	DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+	DESTINATION_DIR2=/usr/share/applications
+	DESKTOP_FILE=popcorn-time.desktop
+	{
+	    echo "[Desktop Entry]"
+		echo "Version=1.0"
+		echo "Type=Application"
+		echo "Name=$NAME"
+		echo "Icon=$ICON_PATH"
+		echo "Exec=\"$EXECUTABLE\" %U"
+		echo "Comment=$COMMENT"
+		echo "Categories=Multimedia;"
+		echo "Terminal=false" 
+	} >> "$DESKTOP_FILE"
+	if [ -d "$DESTINATION_DIR" ]; then
+		mv "$DESKTOP_FILE" "$DESTINATION_DIR"
+	else
+		sudo mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
+	fi
+	sudo -p "- [sudo] password for $USER: " gtk-update-icon-cache /usr/share/icons/hicolor
+}
+
+launch() {
+read -p "- Launch Popcorn Time ? (Y)es/(N)o > " resp;
+case $resp in
+    y|yes)
+    		./Popcorn-Time 2> /dev/null;;
+esac
+echo -e "\\n- Popcorn Time should be in your application list."
+echo "- Execute 'popcorntime -h' for more info. Enjoy :)"
+echo -e "- Installation complete!\\n";
+exit
+}
+
+check() {
+wget -q --spider http://google.com |
+if $? -eq 0; then
+    echo > /dev/null
+else
+    echo -e "- No internet connection\\n"
+    return 5
+fi
+}
+
+extract() {
+	if [ "$bit" == "x86_64" ]; then
+    		num="64"
+   	else
+    		num="32"
+    fi
+    size=$(wc -L < popcorn"$num".tar.xz)
+    if [ "$size" -ge 478 ]; then
+    	tar xf popcorn"$num".tar.xz &
+    	pid=$!
+   		printf "%b" "- ["
+   		i=0
+   		while kill -0 $pid 2>/dev/null;
+    	do
+   			i=$(( (i+1) %4 ))
+   			printf "#"
+   			sleep .3
+    	done;
+    	echo -e "] Done!"
+   		create_desktop_entry
+   		launch
+   	else
+    	rm popcorn"$num".tar.xz
+    	installation
+    fi
+}
+
+installation() {
+if [ -e popcorn64.tar.xz ] || [ -e popcorn32.tar.xz ];then
+	extract
+else
+	read -p "- Download Popcorn Time package ? [Y/n]> " dl
+    if [ "$dl" = y ]; then
+    	wget -q -nc popcorntime.sh || check
+    	if [ $? == 5 ]; then
+    		exit
+    	fi
+        sed -n '35p' index.html > index.txt
+        grab64=$(sed -e 's/.*"><a data-os="Linux 64" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 64-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/get.popcorntime.sh">Other operating systems and platforms<\/a><\/small><\/li><li title="Popcorn Time" class="download dl-android"><a.*//' index.txt);
+        grab32=$(sed -e 's/.*"><a data-os="Linux 32" href="//' -e 's/" class="btn-main icon-linux">Download Popcorn Time 3.10<\/a><br><small><span>For 32-bit Linux<\/span><span class="divider"> <\/span><a href="https:\/\/popcorntime.sh\/linux.html">Other operating systems and platforms<\/a><\/small><\/li><li class="download dl-lin-64"><a.*//' index.txt);
+        if [ "$bit" = "x86_64" ]; then
+        	link="$grab64"
+        	name="popcorn64.tar.xz"
+        else
+        	link="$grab32"
+        	name="popcorn32.tar.xz"
+        fi
+        wget -cq --retry-connrefused --show-progress "$link" || check
+        mv Popcorn-Time-* "$name"
+        extract
+    else
+        if [ ! -e popcorn64.tar.xz ] || [ ! -e popcorn32.tar.xz ];then
+	        rm -rf "$DIR"
+	    fi
+        echo -e "- Installation aborted.\\n" && exit
+    fi
+fi
+}
+
+if [ -d "$DIR" ];then
+	cd "$DIR"
+	size=$(du -sh "$DIR"|sed "s/[K...M].*//")
+	if [ "$size" -ge 301 ] && [ -e /usr/bin/popcorntime ]; then
+		echo -e "- Popcorn Time is already installed."
+		if [ ! -e ~/.local/share/applications/popcorn-time.desktop ] || [ ! -e /usr/share/applications/popcorn-time.desktop ]; then
+			create-desktop-entry
+			echo -e "- Icon cache updated\\n"
+		fi
+	else
+		installation
+	fi
+else
+	mkdir "$DIR"
+	cd "$DIR"
+	installation
+fi
