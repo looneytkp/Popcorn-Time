@@ -10,10 +10,6 @@ wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip
 ```
 ##### Manual method:
   * Download the zip or tar.gz file and extract it.
-  * Double click on the popcorntime script and select "Run in terminal" or open terminal within the folder and run the command: `bash popcorntime` OR `yes|bash popcorntime`.  
-  The latter command skips the interactive mode and runs the script without prompting for user input.
-  * The rest is pretty straight forward. Run ___"popcorntime -h"___ after the installation for more info.
-
-Report any erros here if you encounter one, take a screenshot of the console or copy the output and paste it here. You could also send via email to **"tenphine@gmail.com"** with a subject that would let me know which type of email it is.
+  * Double click on the popcorntime script and select "Run in terminal" or open terminal within the folder and run the command: `bash popcorntime` OR `yes|bash popcorntime`.
 
 ### Best regards.
