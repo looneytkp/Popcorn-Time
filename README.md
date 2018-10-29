@@ -6,7 +6,7 @@ The script can be executed automatically using wget or by manually downloading, 
 ##### Via wget:
 Copy, paste and run the any of the code below in terminal.
 ```bash
-wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && ./Po*er/p*e && rm -rf ma*ip Po*er
+wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && yes|./Po*er/p*e && rm -rf ma*ip Po*er
 ```
 ##### Manual method:
   * Download the zip or tar.gz file and extract it.
