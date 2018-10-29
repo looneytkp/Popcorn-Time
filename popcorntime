@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -xe
 
 architecture=$(uname -m)
 if [ "$architecture" == "x86_64" ]; then bit="64";else bit="32";fi
@@ -26,7 +26,7 @@ create_desktop_entry() {
 installation() {
     extract() {
             md5=$(md5sum popcorn"$bit".tar.xz|sed 's/ .*//')
-            if [ md5sum == '42bfbd562dc712e06679740ed53a07de' ];then
+            if [ $md5 == '42bfbd562dc712e06679740ed53a07de' ];then
                 tar xf popcorn"$bit".tar.xz &
                 pid=$!
                 printf "%b" "- Installing ["
@@ -45,13 +45,13 @@ installation() {
         extract
     else
         read -p "- Download Popcorn Time package ? [Y/n]> " dl
-        if [ "$dl" = y ]; then
-            wget -qnc popcorntime.sh || echo -e "- No internet connection\\n"
-            url=$(sed -n 35p index.html|sed "s/.*a data-os=\"Linux '$bit'\" href=\"//"|sed "s/\".*//")
-            wget -cq --retry-connrefused --show-progress "$url" || echo -e "- No internet connection\\n"
-            mv Popcorn-Time-* popcorn"$bit".tar.xz && extract
+        if [ "$dl" == y ]; then
+            wget -qnc popcorntime.sh || if [ $? != 0 ]; then echo -e "- No internet connection\\n" && exit;fi
+            url=$(sed -n 35p index.html|sed "s/.*a data-os=\"Linux "$bit"\" href=\"//"|sed "s/\".*//")
+            wget -cq --retry-connrefused --show-progress "$url" || if [ $? != 0 ]; then echo -e "- No internet connection\\n" && exit;fi
+            rm index.html; mv Popcorn-Time-* popcorn"$bit".tar.xz && extract
         else
-            if [ -e popcorn"$bit".tar.xz -a md5sum == '42bfbd562dc712e06679740ed53a07de' ];then
+            if [ -e popcorn"$bit".tar.xz -a $md5sum == '42bfbd562dc712e06679740ed53a07de' ];then
             echo -e "- Installation aborted.\\n"
             else
                 rm -rf "$DIR";echo -e "- Installation aborted.\\n"
@@ -61,8 +61,8 @@ installation() {
 }
 
 if [ -d $DIR ];then
-    md5=$(ls $DIR|sed '22d'|md5sum|sed 's/ .*//')
-    if [ $md5 == 'df6179ebc30f35266b22996f723f0e24' ];then
+    md5=$(ls $DIR|md5sum|sed 's/ .*//')
+    if [ $md5 == '25eaa25e4780408bc700e8e695d5117b' ];then
         echo "- Popcorn Time is already installed."
     else cd $DIR && installation;fi
 else
