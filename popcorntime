@@ -1,5 +1,5 @@
 #!/bin/bash
-set -xe
+set -e
 
 architecture=$(uname -m)
 if [ "$architecture" == "x86_64" ]; then bit="64";else bit="32";fi
@@ -40,7 +40,7 @@ installation() {
             else
                 rm popcorn"$bit".tar.xz;installation
             fi
-    }
+                }
     if [ -e popcorn"$bit".tar.xz ];then
         extract
     else
@@ -63,7 +63,7 @@ installation() {
 if [ -d $DIR ];then
     md5=$(ls $DIR|md5sum|sed 's/ .*//')
     if [ $md5 == '25eaa25e4780408bc700e8e695d5117b' ];then
-        echo "- Popcorn Time is already installed."
+        echo "- Popcorn Time is already installed."; #exit
     else cd $DIR && installation;fi
 else
     mkdir "$DIR" && cd "$DIR"
