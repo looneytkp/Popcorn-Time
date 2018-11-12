@@ -1,4 +1,4 @@
-This script automates the proceedure of manually downloading and installing Popcorn Time. The package is downloaded from the official [Popcorn Time](popcorntime.sh) website.
+This script automates the proceedure of manually downloading and installing Popcorn Time. The package is downloaded from the official opensource Popcorn Time website.
 
 ![popcorntime image](img.jpeg)
 #### Usage:
