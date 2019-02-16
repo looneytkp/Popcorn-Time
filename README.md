@@ -1,6 +1,7 @@
 This script automates the proceedure of manually downloading and installing Popcorn Time. The package is downloaded from the official open source Popcorn Time website.
 
-![popcorntime image](img.jpeg)
+<img src="https://popcorntime.sh/images/popcorn-time-image.png" alt="Popcorn Time">
+
 #### Usage:
 The script can be executed automatically using wget or by manually downloading, extracting and executing the script. Both instructions are below, be sure to have an internet connection as it downloads the Popcorn Time package.
 ##### Via wget:
