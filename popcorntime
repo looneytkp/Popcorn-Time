@@ -1,5 +1,7 @@
 #!/bin/bash
+#version 0.3.10 Beta
 set -e
+version="0.3.10 Beta"
 architecture=$(uname -m)
 if [ "$architecture" == "x86_64" ]; then bit="64"; else bit="32"; fi
 DIR=/opt/popcorntime
@@ -43,23 +45,56 @@ CDE(){
     DESTINATION_DIR2=/usr/share/applications
     DESKTOP_FILE=popcorn-time.desktop
     {
-        echo -e "[Desktop Entry]\\nVersion=1.0\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
+        echo -e "[Desktop Entry]\\nVersion=$version\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
     } >> "$DESKTOP_FILE"
-    mv "$DESKTOP_FILE" "$DESTINATION_DIR"
-    sudo cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
-    sudo gtk-update-icon-cache -q /usr/share/icons/hicolor
+	mv "$DESKTOP_FILE" "$DESTINATION_DIR" || sudo mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
+	if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then
+		sudo cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
+	fi
+	sudo gtk-update-icon-cache -q /usr/share/icons/hicolor
+	grep -q "popcorntime" ~/.*shrc || echo 'alias popcorntime="./opt/Popcorn-Time"' | tee -a ~/.*rc > /dev/null
     echo -e "- Installation complete!\\n"
     cleanup && exit
 }
 trap sig_abort SIGINT
-cleanup
-if [ -d $DIR ]; then sudo -p "- [sudo] password: " rm -rf $DIR; fi
-if [ -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then sudo -p "- [sudo] password: " rm /usr/share/icons/hicolor/48x48/apps/popcorntime.png; fi
-printf %b "\\n                                          [Y/n]\\r"
+cleanup; echo
+if [ -d $DIR ]; then #sudo -p "- [sudo] password: " rm -rf $DIR; fi
+	dir_size=$(du -ac $DIR|grep total|sed 's:	total::')
+	if [ "$dir_size" -lt "307572" ]; then
+		echo "- Configuration errors, reinstalling..."
+		sudo -p "- [sudo] password: " rm -rf $DIR
+	else
+		echo -e "- Popcorn Time is already installed."
+		if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ] || [ ! -e $DESKTOP_FILE ]; then echo "- Applying possible fixes to configuration..."; fi
+		if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then
+    		sudo -p "- [sudo] password: " cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
+    		echo "- Fixed app icon."
+    		fix=0
+    	fi
+    	if [ ! -e $DESKTOP_FILE ]; then
+    		{ echo -e "[Desktop Entry]\\nVersion=1.0\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
+    		} >> "$DESKTOP_FILE"
+    		mv "$DESKTOP_FILE" "$DESTINATION_DIR" || sudo -p "- [sudo] password: " mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
+    		echo "- Fixed desktop file."
+			fix=0
+    	fi
+    	if ! grep -q "popcorntime" ~/.*shrc; then
+    		echo 'alias popcorntime="./opt/Popcorn-Time"' | tee -a ~/.*rc > /dev/null
+    		echo "- Added CLI shortcut to rc."
+    	fi
+    	if [ "$fix" ]; then
+			echo -e "- Possible fixes have been applied.\\n- Launch Popcorn Time via application list or cmd prompt.\\n- Installation complete!\\n"
+		else
+			echo -e "- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
+		fi
+    	cleanup && exit
+	fi
+fi
+printf %b "                                          [Y/n]\\r"
 read -N 1 -erp "- Download & install Popcorn Time ? " dl
 case "$dl" in
 	y|Y)
-		sudo -p "- [sudo] password: " mkdir $DIR
+		sudo -p "- [sudo] password: " mkdir -p $DIR
 		if [ ! -e ~/Downloads/popcorn"$bit".tar.xz ]; then
 			wget -q popcorntime.sh -O $DL_DIR/ptf.xt -o $DL_DIR/.wget || connect
 			url=$(sed -n 38p $DL_DIR/ptf.xt | sed -e "s/.*a data-os=\"Linux $bit\" href=\"//" -e "s/\".*//")
