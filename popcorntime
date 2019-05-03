@@ -35,6 +35,7 @@ connect(){
 CDE(){
 	echo '- Installing...'
 	sudo tar xf ~/Downloads/popcorn"$bit".tar.xz -C $DIR
+	sudo mv $DIR/Popcorn-Time $DIR/popcorntime
     NAME="Popcorn Time"
     COMMENT="Watch Movies and TV Shows instantly!"
     CURRENT_DIR=$DIR
@@ -52,7 +53,7 @@ CDE(){
 		sudo cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
 	fi
 	sudo gtk-update-icon-cache -q /usr/share/icons/hicolor
-	grep -q "popcorntime" ~/.*shrc || echo 'alias popcorntime="./opt/Popcorn-Time"' | tee -a ~/.*rc > /dev/null
+	grep -q "popcorntime" ~/.*shrc || echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
     echo -e "- Installation complete!\\n"
     cleanup && exit
 }
@@ -79,7 +80,7 @@ if [ -d $DIR ]; then #sudo -p "- [sudo] password: " rm -rf $DIR; fi
 			fix=0
     	fi
     	if ! grep -q "popcorntime" ~/.*shrc; then
-    		echo 'alias popcorntime="./opt/Popcorn-Time"' | tee -a ~/.*rc > /dev/null
+    		echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
     		echo "- Added CLI shortcut to rc."
     	fi
     	if [ "$fix" ]; then
