@@ -24,7 +24,7 @@ Or copy & paste any of the codes below in a terminal: ```bash popcorntime -u```
 
 OR
 
-```sudo rm -fr $DIR || true; sudo rm -f /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true; rm -fr /home/$(whoami)/.local/share/applications/popcorn-time.desktop || true```
+```sudo rm -fr $DIR || true; sudo rm /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true; rm /home/$(whoami)/.local/share/applications/popcorn-time.desktop || true```
 
 Done!
 
