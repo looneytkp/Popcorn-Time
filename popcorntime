@@ -119,8 +119,8 @@ case $1 in
 			case $uninstall in
 				y|Y|'')
 						sudo -p '- [sudo] password: ' rm -fr $DIR || true
-						sudo rm -f /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
-						rm -fr $DESTINATION_DIR/$DESKTOP_FILE || true
+						sudo rm /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
+						rm $DESTINATION_DIR/$DESKTOP_FILE || true
 						echo -e "\\n- Uninstallation complete!\\n";;
 				*)	echo -e "- Uninstallation aborted!\\n";;
 			esac
