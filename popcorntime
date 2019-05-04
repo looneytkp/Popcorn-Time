@@ -111,19 +111,19 @@ case $1 in
 				echo -e "- Installation aborted.\\n";;
 		esac;;
 	-u)
-		printf %b "\\n                                [Y/n]\\r"
-		read -N 1 -erp "- Uninstall Popcorn-Time ? " uninstall
-		case $uninstall in
-			y|Y|'')
-				if [ ! -d $DIR ]; then
-					echo -e "\\n- Popcorn-Time is not installed.\\n"
-				else
-					sudo rm -frv $DIR || true
-					sudo rm -fv /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
-					rm -frv $DESTINATION_DIR/$DESKTOP_FILE || true
-					echo -e "\\n- Uninstallation complete!\\n"
-				fi;;
-			*)	echo -e "- Uninstallation aborted!\\n";;
-		esac;;
+		if [ ! -d $DIR ]; then
+			echo -e "\\n- Popcorn-Time is not installed.\\n- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
+		else
+			printf %b "\\n                                [Y/n]\\r"
+			read -N 1 -erp "- Uninstall Popcorn-Time ? " uninstall
+			case $uninstall in
+				y|Y|'')
+						sudo -p '- [sudo] password: ' rm -fr $DIR || true
+						sudo rm -f /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
+						rm -fr $DESTINATION_DIR/$DESKTOP_FILE || true
+						echo -e "\\n- Uninstallation complete!\\n";;
+				*)	echo -e "- Uninstallation aborted!\\n";;
+			esac
+		fi;;
 esac
 # end of script #
