@@ -1,13 +1,21 @@
 #!/bin/bash
-#version 0.3.10 Beta
+#Popcorn-Time installation script
 set -e
 version="0.3.10 Beta"
 architecture=$(uname -m)
 if [ "$architecture" == "x86_64" ]; then bit="64"; else bit="32"; fi
 DIR=/opt/popcorntime
 DL_DIR=~/Downloads
+NAME="Popcorn Time"
+COMMENT="Watch Movies and TV Shows instantly!"
+CURRENT_DIR=$DIR
+EXECUTABLE=$CURRENT_DIR/popcorntime
+#ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
+ICON_PATH=popcorntime
+DESTINATION_DIR=/home/$(whoami)/.local/share/applications
+DESKTOP_FILE=popcorn-time.desktop
 sig_abort(){
-	cleanup && echo -e "- Aborted.\\n" && exit 0
+	cleanup && echo -e "\\n- Aborted.\\n" && exit 0
 }
 cleanup(){
 	if [ -e $DL_DIR/.wget ]; then rm $DL_DIR/.wget; fi
@@ -36,19 +44,10 @@ CDE(){
 	echo '- Installing...'
 	sudo tar xf ~/Downloads/popcorn"$bit".tar.xz -C $DIR
 	sudo mv $DIR/Popcorn-Time $DIR/popcorntime
-    NAME="Popcorn Time"
-    COMMENT="Watch Movies and TV Shows instantly!"
-    CURRENT_DIR=$DIR
-    EXECUTABLE=$CURRENT_DIR/Popcorn-Time
-    #ICON_PATH=$CURRENT_DIR/src/app/images/icon.png
-    ICON_PATH=popcorntime
-    DESTINATION_DIR=/home/$(whoami)/.local/share/applications
-    DESTINATION_DIR2=/usr/share/applications
-    DESKTOP_FILE=popcorn-time.desktop
     {
         echo -e "[Desktop Entry]\\nVersion=$version\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
     } >> "$DESKTOP_FILE"
-	mv "$DESKTOP_FILE" "$DESTINATION_DIR" || sudo mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
+	mv "$DESKTOP_FILE" "$DESTINATION_DIR"
 	if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then
 		sudo cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
 	fi
@@ -58,53 +57,73 @@ CDE(){
     cleanup && exit
 }
 trap sig_abort SIGINT
-cleanup; echo
-if [ -d $DIR ]; then #sudo -p "- [sudo] password: " rm -rf $DIR; fi
-	dir_size=$(du -ac $DIR|grep total|sed 's:	total::')
-	if [ "$dir_size" -lt "307572" ]; then
-		echo "- Configuration errors, reinstalling..."
-		sudo -p "- [sudo] password: " rm -rf $DIR
-	else
-		echo -e "- Popcorn Time is already installed."
-		if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ] || [ ! -e $DESKTOP_FILE ]; then echo "- Applying possible fixes to configuration..."; fi
-		if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then
-    		sudo -p "- [sudo] password: " cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
-    		echo "- Fixed app icon."
-    		fix=0
-    	fi
-    	if [ ! -e $DESKTOP_FILE ]; then
-    		{ echo -e "[Desktop Entry]\\nVersion=1.0\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
-    		} >> "$DESKTOP_FILE"
-    		mv "$DESKTOP_FILE" "$DESTINATION_DIR" || sudo -p "- [sudo] password: " mv "$DESKTOP_FILE" "$DESTINATION_DIR2"
-    		echo "- Fixed desktop file."
-			fix=0
-    	fi
-    	if ! grep -q "popcorntime" ~/.*shrc; then
-    		echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
-    		echo "- Added CLI shortcut to rc."
-    	fi
-    	if [ "$fix" ]; then
-			echo -e "- Possible fixes have been applied.\\n- Launch Popcorn Time via application list or cmd prompt.\\n- Installation complete!\\n"
-		else
-			echo -e "- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
+cleanup
+
+case $1 in
+	"")
+		echo
+		if [ -d $DIR ]; then
+			dir_size=$(du -ac $DIR|grep total|sed 's:	total::')
+			if [ "$dir_size" -lt "307572" ]; then
+				echo "- Configuration errors, reinstalling..."
+				sudo -p "- [sudo] password: " rm -rf $DIR
+			else
+				echo -e "- Popcorn Time is already installed."
+				if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ] || [ ! -e $DESTINATION_DIR/$DESKTOP_FILE ]; then echo "- Applying possible fixes to configuration..."; fi
+				if [ ! -e /usr/share/icons/hicolor/48x48/apps/popcorntime.png ]; then
+		    		sudo -p "- [sudo] password: " cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
+		    		echo "- Fixed app icon."
+		    		fix=0
+		    	fi
+		    	if [ ! -e $DESTINATION_DIR/$DESKTOP_FILE ]; then
+		    		{ echo -e "[Desktop Entry]\\nVersion=1.0\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
+		    		} >> "$DESKTOP_FILE"
+		    		mv "$DESKTOP_FILE" "$DESTINATION_DIR"
+		    		echo "- Fixed desktop file."
+					fix=0
+		    	fi
+		    	if ! grep -q "popcorntime" ~/.*shrc; then
+		    		echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
+		    		echo "- Added CLI shortcut to rc."
+		    	fi
+		    	if [ "$fix" ]; then
+					echo -e "- Possible fixes have been applied.\\n- Launch Popcorn Time via application list or cmd prompt.\\n- Installation complete!\\n"
+				else
+					echo -e "- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
+				fi
+		    	cleanup && exit
+			fi
 		fi
-    	cleanup && exit
-	fi
-fi
-printf %b "                                          [Y/n]\\r"
-read -N 1 -erp "- Download & install Popcorn Time ? " dl
-case "$dl" in
-	y|Y)
-		sudo -p "- [sudo] password: " mkdir -p $DIR
-		if [ ! -e ~/Downloads/popcorn"$bit".tar.xz ]; then
-			wget -q popcorntime.sh -O $DL_DIR/ptf.xt -o $DL_DIR/.wget || connect
-			url=$(sed -n 38p $DL_DIR/ptf.xt | sed -e "s/.*a data-os=\"Linux $bit\" href=\"//" -e "s/\".*//")
-			wget -qc --timeout=10 --waitretry=0 --tries=4 --retry-connrefused --show-progress "$url" -O $DL_DIR/popcorn"$bit".tar.xz -o $DL_DIR/.wget || connect
-			CDE
-		else
-			CDE
-		fi;;
-	*)
-		echo -e "- Installation aborted.\\n";;
+		printf %b "                                          [Y/n]\\r"
+		read -N 1 -erp "- Download & install Popcorn Time ? " dl
+		case "$dl" in
+			y|Y|"")
+				sudo -p "- [sudo] password: " mkdir -p $DIR
+				if [ ! -e ~/Downloads/popcorn"$bit".tar.xz ]; then
+					wget -q popcorntime.sh -O $DL_DIR/ptf.xt -o $DL_DIR/.wget || connect
+					url=$(sed -n 38p $DL_DIR/ptf.xt | sed -e "s/.*a data-os=\"Linux $bit\" href=\"//" -e "s/\".*//")
+					wget -qc --timeout=10 --waitretry=0 --tries=4 --retry-connrefused --show-progress "$url" -O $DL_DIR/popcorn"$bit".tar.xz -o $DL_DIR/.wget || connect
+					CDE
+				else
+					CDE
+				fi;;
+			*)
+				echo -e "- Installation aborted.\\n";;
+		esac;;
+	-u)
+		printf %b "\\n                                [Y/n]\\r"
+		read -N 1 -erp "- Uninstall Popcorn-Time ? " uninstall
+		case $uninstall in
+			y|Y|'')
+				if [ ! -d $DIR ]; then
+					echo -e "\\n- Popcorn-Time is not installed.\\n"
+				else
+					sudo rm -frv $DIR || true
+					sudo rm -fv /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
+					rm -frv $DESTINATION_DIR/$DESKTOP_FILE || true
+					echo -e "\\n- Uninstallation complete!\\n"
+				fi;;
+			*)	echo -e "- Uninstallation aborted!\\n";;
+		esac;;
 esac
 # end of script #
