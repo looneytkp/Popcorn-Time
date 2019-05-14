@@ -8,7 +8,7 @@ The script can be executed automatically using wget or by manually downloading, 
 Copy, paste and run the code below in a terminal:
 
 ```bash
-wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && ./Po*er/p*e && rm -rf ma*ip Po*er
+wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && ./Po*er/p*e; rm -rf ma*ip Po*er
 ```
 ##### Manual method:
 Download the zip or tar.gz file and extract it, double click on the popcorntime script and select "Run in terminal" or open terminal within the folder and run the command: ```bash popcorntime```
@@ -17,7 +17,7 @@ Download the zip or tar.gz file and extract it, double click on the popcorntime 
 Copy, paste and run the code below in a terminal:
 
 ```bash
-wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && ./Po*er/p*e -u && rm -rf ma*ip Po*er
+wget -qnc 'https://github.com/looneytkp/popcorntime/archive/master.zip' && unzip -oq ma*ip && ./Po*er/p*e -u; rm -rf ma*ip Po*er
 ```
 ##### Manual method:
 Or copy & paste any of the codes below in a terminal: ```bash popcorntime -u```

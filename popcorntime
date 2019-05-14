@@ -44,6 +44,7 @@ CDE(){
 	echo '- Installing...'
 	sudo tar xf ~/Downloads/popcorn"$bit".tar.xz -C $DIR
 	sudo mv $DIR/Popcorn-Time $DIR/popcorntime
+	sudo ln -sf $DIR/popcorntime /usr/bin/popcorntime
     {
         echo -e "[Desktop Entry]\\nVersion=$version\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=Network\\nTerminal=false"
     } >> "$DESKTOP_FILE"
@@ -52,7 +53,7 @@ CDE(){
 		sudo cp $CURRENT_DIR/src/app/images/icon.png /usr/share/icons/hicolor/48x48/apps/popcorntime.png
 	fi
 	sudo gtk-update-icon-cache -q /usr/share/icons/hicolor
-	grep -q "popcorntime" ~/.*shrc || echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
+	#grep -q "popcorntime" ~/.*shrc || echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
     echo -e "- Installation complete!\\n"
     cleanup && exit
 }
@@ -82,10 +83,14 @@ case $1 in
 		    		echo "- Fixed desktop file."
 					fix=0
 		    	fi
-		    	if ! grep -q "popcorntime" ~/.*shrc; then
-		    		echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
-		    		echo "- Added CLI shortcut to rc."
+		    	if [ ! -e /usr/bin/popcorntime ]; then
+		    		sudo ln -sf $DIR/popcorntime /usr/bin/popcorntime
+		    		echo "- Added CLI shortcut."
 		    	fi
+#		    	if ! grep -q "popcorntime" ~/.*shrc; then
+#		    		echo 'export PATH=$PATH:/opt/popcorntime' | tee -a ~/.*rc > /dev/null
+#		    		echo "- Added CLI shortcut to rc."
+#		    	fi
 		    	if [ "$fix" ]; then
 					echo -e "- Possible fixes have been applied.\\n- Launch Popcorn Time via application list or cmd prompt.\\n- Installation complete!\\n"
 				else
@@ -119,6 +124,7 @@ case $1 in
 			case $uninstall in
 				y|Y|'')
 						sudo -p '- [sudo] password: ' rm -fr $DIR || true
+						sudo rm /usr/bin/popcorntime
 						sudo rm /usr/share/icons/hicolor/48x48/apps/popcorntime.png || true
 						rm $DESTINATION_DIR/$DESKTOP_FILE || true
 						echo -e "\\n- Uninstallation complete!\\n";;
