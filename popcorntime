@@ -43,7 +43,7 @@ case $1 in
 		if [ ! -d $DIR ]; then
 			echo -e "\\n- Popcorn-Time is not installed.\\n- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
 		else
-			echo -e "\\n- Uninstall Popcorn Time"; uninstall; echo -e "- Popcorn Time uninstalled\\n"
+			echo -e "\\n- Uninstall Popcorn Time ?"; uninstall; echo -e "- Popcorn Time uninstalled.\\n"
 		fi;;
 esac
 # end of script #
