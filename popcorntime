@@ -21,7 +21,7 @@ uninstall(){
 case $1 in
 	"")
 		if [ -d $DIR ]; then uninstall; fi
-		echo '- Installing...'
+		echo -e '\\n- Installing...'
 		sudo -p "- [sudo] password: " mkdir -p $DIR
 		URL=$(curl -s "https://popcorntime.app" | grep -ow "Linux $bit\" href.*https://get.popcorntime.app/build/Popcorn-Time.*linux$bit.zip" | sed 's:.*https:https:')
 		wget -qc --timeout=15 --waitretry=0 --tries=3 --retry-connrefused --show-progress "$URL" -O $DL_DIR/popcorn.zip
@@ -37,13 +37,13 @@ case $1 in
 		chmod a+x "$DESTINATION_DIR/$DESKTOP_FILE"
 		gio set "$DESTINATION_DIR/$DESKTOP_FILE" metadata::trusted yes
 		sudo gtk-update-icon-cache -q /usr/share/icons/hicolor
-		echo '- Testing Popcorn Time' && /opt/Popcorn-Time/Popcorn-Time %U 2> /dev/null
-	    echo -e "- Popcorn Time installed\\n- Can't find Popcorn Time icon? Reboot your PC\\n- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"; exit;;
+		echo '- Testing Popcorn Time...' && /opt/Popcorn-Time/Popcorn-Time %U 2> /dev/null
+	    echo -e "- Popcorn Time is installed.\\n- Can't find Popcorn Time icon? Reboot your PC.\\n- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"; exit;;
 	-u)
 		if [ ! -d $DIR ]; then
 			echo -e "\\n- Popcorn-Time is not installed.\\n- Report issues via Github: \"https://github.com/looneytkp/Popcorn-Time\".\\n"
 		else
-			uninstall; echo -e "\\n- Popcorn Time uninstalled\\n"
+			echo "- Uninstall Popcorn Time"; uninstall; echo -e "- Popcorn Time uninstalled\\n"
 		fi;;
 esac
 # end of script #
