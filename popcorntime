@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-architecture=$(uname -m)
-if [ "$architecture" == "x86_64" ]; then bit="64"; else bit="32"; fi
+arch=$(uname -m)
+if [ "$arch" == "x86_64" ]; then bit="64"; else bit="32"; fi
 DIR=/opt/Popcorn-Time
 DL_DIR=$(xdg-user-dir DOWNLOAD)
 NAME="Popcorn Time"
@@ -25,7 +25,7 @@ case $1 in
                 sudo -p "- [sudo] password: " mkdir -p $DIR
                 URL=$(curl -s "https://popcorntime.app" | grep -ow "Linux $bit\" href.*https://get.popcorntime.app/build/Popcorn-Time.*linux$bit.zip" | sed 's:.*https:https:')
                 wget -qc --timeout=15 --waitretry=0 --tries=3 --retry-connrefused --show-progress "$URL" -O $DL_DIR/popcorn.zip
-                sudo unzip -q $(xdg-user-dir DOWNLOAD)/popcorn.zip -d $DIR
+                sudo unzip -q $DL_DIR/popcorn.zip -d $DIR
                 #sudo ln -sf $DIR/Popcorn-Time /usr/bin/popcorntime
             {
                 echo -e "[Desktop Entry]\\nVersion=$version\\nType=Application\\nName=$NAME\\nIcon=$ICON_PATH\\nExec=\"$EXECUTABLE\" %U\\nComment=$COMMENT\\nCategories=AudioVideo\\nTerminal=false"
@@ -46,4 +46,4 @@ case $1 in
                         echo -e "\\n- Uninstall Popcorn Time ?"; uninstall; echo -e "- Popcorn Time uninstalled.\\n"
                 fi;;
 esac
-# end of script #
+#end#
